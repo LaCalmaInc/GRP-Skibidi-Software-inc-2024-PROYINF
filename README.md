@@ -7,4 +7,4 @@
 
 ## Wiki:
 
-Puede acceder a la mWiki desde el siguiente [enlace](https://github.com/LaCalmaInc/GRP-Analysis-Enjoyers-2024-PROYINF/wiki)
+Puede acceder a la Wiki desde el siguiente [enlace](https://github.com/LaCalmaInc/GRP-Analysis-Enjoyers-2024-PROYINF/wiki)
