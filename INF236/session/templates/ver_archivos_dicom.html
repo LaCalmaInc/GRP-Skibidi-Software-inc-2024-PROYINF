@@ -1,0 +1,23 @@
+<!-- En tu archivo ver_archivos_dicom.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Archivos DICOM</title>
+</head>
+<body>
+    <h2>Archivos DICOM</h2>
+    <ul>
+        {% for archivo_dicom in archivos_dicom %}
+            <li>
+                <strong>Nombre del Paciente:</strong> {{ archivo_dicom.nombre_paciente }}<br>
+                <strong>Fecha:</strong> {{ archivo_dicom.fecha }}<br>
+                <!-- Mostrar la imagen indexada -->
+                <img src="{{ archivo_dicom.imagen_indexada.url }}" alt="Imagen Indexada"><br>
+                <!-- Agrega más información DICOM aquí si lo deseas -->
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

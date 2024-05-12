@@ -1,9 +1,14 @@
 # En tu archivo forms.py
 
 from django import forms
-from .models import Archivo
+from .models import ArchivoDicom
 
-class ArchivoForm(forms.ModelForm):
+
+
+class ArchivoDicomForm(forms.ModelForm):
     class Meta:
-        model = Archivo
-        fields = ['nombre', 'archivo']
+        model = ArchivoDicom
+        fields = ['archivo']  # Solo mostramos el campo archivo en el formulario
+        widgets = {
+            'archivo': forms.FileInput(attrs={'accept': '.dcm'})
+        }
