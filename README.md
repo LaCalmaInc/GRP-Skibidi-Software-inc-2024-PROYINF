@@ -18,7 +18,10 @@ _Actualizaciones_
   Escribir esto en linea de comandos de windows: py -m pip install Django==5.0.6
 
   Luego de tener instalado Django, descargar la carpeta INF236.
-  Abrir el proyecto con su IDE favorito y abrir una terminal que tenga como ruta la carpeta main
+  Abrir el proyecto con su IDE favorito y abrir una terminal que tenga como ruta la carpeta main.
+  
   ![image](https://github.com/LaCalmaInc/GRP-Analysis-Enjoyers-2024-PROYINF/assets/91389965/e97b0546-fcbd-4b86-8e45-5a63afc1da4c)
+
+  
   Instalar
 
