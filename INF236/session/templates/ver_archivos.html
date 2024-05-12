@@ -1,0 +1,16 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Archivos Cargados</title>
+</head>
+<body>
+    <h2>Archivos Cargados</h2>
+    <ul>
+        {% for archivo in archivos %}
+            <li><a href="{{ archivo.url }}">{{ archivo.nombre }}</a></li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

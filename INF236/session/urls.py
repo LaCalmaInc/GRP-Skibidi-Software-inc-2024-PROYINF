@@ -1,7 +1,9 @@
-from django.urls import path
+# En tu archivo urls.py
 
-from . import views
+from django.urls import path
+from .views import cargar_archivo, ver_archivos
 
 urlpatterns = [
-    path("", views.index, name="index"),
+    path('cargar/', cargar_archivo, name='cargar_archivo'),
+    path('ver/', ver_archivos, name='ver_archivos'),
 ]

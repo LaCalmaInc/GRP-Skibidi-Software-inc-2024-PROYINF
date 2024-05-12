@@ -1,9 +1,19 @@
-from django.shortcuts import render
+# En tu archivo views.py
 
-# Create your views here.
+from django.shortcuts import render, redirect
+from .forms import ArchivoForm
+from .models import Archivo
 
-from django.http import HttpResponse
+def cargar_archivo(request):
+    if request.method == 'POST':
+        form = ArchivoForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('cargar_archivo')
+    else:
+        form = ArchivoForm()
+    return render(request, 'cargar_archivo.html', {'form': form})
 
-
-def index(request):
-    return render(request,'inicio.html')
+def ver_archivos(request):
+    archivos = Archivo.objects.all()
+    return render(request, 'ver_archivos.html', {'archivos': archivos})

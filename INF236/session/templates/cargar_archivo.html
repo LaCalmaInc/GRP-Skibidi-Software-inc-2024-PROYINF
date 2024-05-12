@@ -1,0 +1,18 @@
+{% load static %}
+<!-- En tu archivo cargar_archivo.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Cargar Archivo</title>
+</head>
+<body>
+    <h2>Cargar Archivo</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Cargar</button>
+    </form>
+</body>
+</html>
