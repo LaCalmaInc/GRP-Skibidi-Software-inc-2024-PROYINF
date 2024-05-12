@@ -23,4 +23,6 @@ _Actualizaciones_
   ![image](https://github.com/LaCalmaInc/GRP-Analysis-Enjoyers-2024-PROYINF/assets/91389965/e97b0546-fcbd-4b86-8e45-5a63afc1da4c)
 
   
-  Instalar
+  Instalar la libreria pydicom: pip install pydicom
+  Instalar crispy forms: pip install django-crispy-forms
+  Instalar bootstrap: pip install crispy-bootstrap5
