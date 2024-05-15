@@ -9,8 +9,4 @@
 
 Puede acceder a la Wiki desde el siguiente [enlace](https://github.com/LaCalmaInc/GRP-Analysis-Enjoyers-2024-PROYINF/wiki)
 
-_Actualizaciones_
-- Nueva entrada a la wiki con el concepto de interfaz (24/04)
-- Nuevo proyecto de desarrollo carpeta INF236
-
 
