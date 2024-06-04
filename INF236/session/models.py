@@ -41,3 +41,11 @@ class ArchivoDicom(models.Model):
             buffer = BytesIO()
             img.save(buffer, format='JPEG')
             self.imagen_indexada.save('imagen_indexada.jpg', buffer)
+
+class Maquinaria(models.Model):
+    nombre = models.CharField(max_length=100)   
+
+    def __str__(self):
+        return self.nombre
+    
+    
