@@ -17,7 +17,6 @@ def cargar_archivo_dicom(request):
     return render(request, 'cargar_archivo_dicom.html', {'form': form})
 
 
-
 def cargar_archivo_dicom(request):
     if request.method == 'POST':
         form = ArchivoDicomForm(request.POST, request.FILES)
@@ -32,3 +31,10 @@ def cargar_archivo_dicom(request):
 def ver_archivos_dicom(request):
     archivos_dicom = ArchivoDicom.objects.all()
     return render(request, 'ver_archivos_dicom.html', {'archivos_dicom': archivos_dicom})
+
+
+def ver_imagenes_dicom(request):
+    # Recuperar todos los archivos DICOM
+    archivos_dicom = ArchivoDicom.objects.all()
+    # Pasar la lista de archivos DICOM a la plantilla
+    return render(request, 'ver_imagenes_dicom.html', {'archivos_dicom': archivos_dicom})
