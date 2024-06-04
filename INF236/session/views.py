@@ -16,6 +16,9 @@ def cargar_archivo_dicom(request):
         form = ArchivoDicomForm()
     return render(request, 'cargar_archivo_dicom.html', {'form': form})
 
+def index(request):
+    return render(request, 'index.html')
+
 
 
 def cargar_archivo_dicom(request):
