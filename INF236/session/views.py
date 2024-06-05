@@ -4,21 +4,9 @@ from django.shortcuts import render, redirect
 from .models import ArchivoDicom
 from .forms import ArchivoDicomForm
 
-def cargar_archivo_dicom(request):
-    if request.method == 'POST':
-        form = ArchivoDicomForm(request.POST, request.FILES)
-        if form.is_valid():
-            archivo_dicom = form.save(commit=False)
-            archivo_dicom.guardar_metadata()  # Guarda los metadatos
-            archivo_dicom.save()
-            return redirect('ver_archivos_dicom')
-    else:
-        form = ArchivoDicomForm()
-    return render(request, 'cargar_archivo_dicom.html', {'form': form})
 
 def index(request):
     return render(request, 'index.html')
-
 
 
 def cargar_archivo_dicom(request):
