@@ -20,7 +20,7 @@
                 <select id="maquinaria" name="maquinaria" class="form-control">
                     <option value="" selected disabled>Seleccionar Maquinaria</option>
                     {% for maq in maquinarias %}
-                        <option value="{{ maq }}" {% if maquinaria_id == maq|stringformat:"s" %}selected{% endif %}>
+                        <option value="{{ maq }}" {% if maquinaria_id == maq %}selected{% endif %}>
                             {{ maq }}
                         </option>
                     {% endfor %}
@@ -29,35 +29,32 @@
             <button type="submit" class="btn btn-primary">Buscar</button>
         </form>
     </center>
+    {% if request.GET %}
     <div class="container">
         <h2>Resultados</h2>
-        {% if request.GET %}
-            {% if archivos %}
-                <table class="table table-striped">
-                    <thead>
+        {% if archivos %}
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Nombre del Paciente</th>
+                        <th>Fecha de Atención</th>
+                        <th>Nombre de la Maquinaria</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for archivo in archivos %}
                         <tr>
-                            <th>Nombre del Paciente</th>
-                            <th>Fecha de Atención</th>
-                            <th>Nombre de la Maquinaria</th>
+                            <td>{{ archivo.nombre_paciente }}</td>
+                            <td>{{ archivo.fecha }}</td>
+                            <td>{{ archivo.nombre_maquinaria }}</td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        {% for archivo in archivos %}
-                            <tr>
-                                <td>{{ archivo.nombre_paciente }}</td>
-                                <td>{{ archivo.fecha }}</td>
-                                <td>{{ archivo.nombre_maquinaria }}</td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            {% else %}
-                <p>No se encontraron resultados.</p>
-            {% endif %}
+                    {% endfor %}
+                </tbody>
+            </table>
         {% else %}
-            <p>Por favor, ingrese un nombre y seleccione una maquinaria para buscar.</p>
+            <p>No se encontraron resultados.</p>
         {% endif %}
     </div>
+    {% endif %}
 </body>
 </html>
-
