@@ -1,0 +1,112 @@
+{% load static %}
+{% load crispy_forms_tags %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ver Imágenes DICOM</title>
+    <link rel="stylesheet" type="text/css" href="https://bootswatch.com/5/solar/bootstrap.min.css">
+    <style>
+        .container {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+        }
+        .dicom-container {
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .dicom-image {
+            display: none;
+            margin-bottom: 10px;
+        }
+        .dicom-image.active {
+            display: block;
+        }
+        .navigation-buttons {
+            margin-top: 10px;
+        }
+        .select-index {
+            margin-bottom: 10px;
+        }
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const imageContainers = document.querySelectorAll('.dicom-container');
+
+            imageContainers.forEach((container, containerIndex) => {
+                let currentIndex = 0;
+                const images = container.querySelectorAll('.dicom-image');
+                const totalImages = images.length;
+                
+                function showImage(index) {
+                    images.forEach((img, i) => {
+                        img.classList.remove('active');
+                        if (i === index) {
+                            img.classList.add('active');
+                        }
+                    });
+                }
+
+                container.querySelector('.next-btn').addEventListener('click', function() {
+                    currentIndex = (currentIndex + 1) % totalImages;
+                    showImage(currentIndex);
+                });
+
+                container.querySelector('.prev-btn').addEventListener('click', function() {
+                    currentIndex = (currentIndex - 1 + totalImages) % totalImages;
+                    showImage(currentIndex);
+                });
+
+                container.querySelector('.select-index').addEventListener('change', function(event) {
+                    currentIndex = parseInt(event.target.value, 10);
+                    showImage(currentIndex);
+                });
+
+                showImage(currentIndex);
+            });
+        });
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="dicom-container" id="dicom-container-1" style="top: 250px; left: 650px;">
+            <select class="select-index">
+                {% for i in archivos_dicom %}
+                    <option value="{{ forloop.counter0 }}">{{ forloop.counter }}</option>
+                {% endfor %}
+            </select>
+            {% for archivo_dicom in archivos_dicom %}
+                <div class="dicom-image">
+                    <img src="{{ archivo_dicom.imagen_indexada.url }}" alt="Imagen DICOM" style="width: 300px;">
+                </div>
+            {% endfor %}
+            <div class="navigation-buttons">
+                <button class="prev-btn">Anterior</button>
+                <button class="next-btn">Siguiente</button>
+            </div>
+        </div>
+
+        <div class="dicom-container" id="dicom-container-2" style="top: 250px; left: 1000px;">
+            <select class="select-index">
+                {% for i in archivos_dicom %}
+                    <option value="{{ forloop.counter0 }}">{{ forloop.counter }}</option>
+                {% endfor %}
+            </select>
+            {% for archivo_dicom in archivos_dicom %}
+                <div class="dicom-image">
+                    <img src="{{ archivo_dicom.imagen_indexada.url }}" alt="Imagen DICOM" style="width: 300px;">
+                </div>
+            {% endfor %}
+            <div class="navigation-buttons">
+                <button class="prev-btn">Anterior</button>
+                <button class="next-btn">Siguiente</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
