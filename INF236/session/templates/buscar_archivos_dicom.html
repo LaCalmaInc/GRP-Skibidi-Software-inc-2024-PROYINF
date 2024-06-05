@@ -6,17 +6,20 @@
     <title>Buscar Archivos DICOM</title>
     <link rel="stylesheet" type="text/css" href="https://bootswatch.com/5/solar/bootstrap.min.css">
 </head>
+<center>
 <body>
     <h1>Buscar Archivos DICOM</h1>
+    {% csrf_token %}
+    
     <form method="get" action="">
         <label for="nombre">Nombre:</label>
         <input type="text" id="nombre" name="nombre" value="{{ nombre }}">
         
         <label for="maquinaria">Maquinaria:</label>
         <select id="maquinaria" name="maquinaria">
-            <option value="">Seleccionar Maquinaria</option>
+            <option value="" selected disabled = true>Seleccionar Maquinaria</option>
             {% for maq in maquinarias %}
-                <option value="{{maq}}" {% if maquinaria_id == maq.id|stringformat:"s" %}selected{% endif %}>
+                <option value="{{maq}} " {% if maquinaria_id == maq|stringformat:"s" %}selected{% endif %}>
                     {{ maq }}
                 </option>
             {% endfor %}
@@ -24,7 +27,7 @@
         
         <button type="submit">Buscar</button>
     </form>
-    
+    </center>
     <h2>Resultados</h2>
     <ul>
         {% if archivos %}
