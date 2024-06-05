@@ -18,7 +18,7 @@ class ArchivoDicom(models.Model):
         return self.nombre_paciente
 
     def guardar_metadata(self):
- 
+        self.save()
         ds = pydicom.dcmread(self.archivo.path)
 
         self.nombre_paciente = ds.PatientName
