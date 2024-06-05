@@ -1,9 +1,10 @@
 # En tu archivo views.py
 
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect,get_object_or_404
 from .models import ArchivoDicom
 from .forms import ArchivoDicomForm, Busqueda_filtros
 import pydicom
+from django.urls import reverse
 
 def cargar_archivo_dicom(request):
     if request.method == 'POST':
@@ -30,13 +31,11 @@ def ver_archivos_dicom(request):
 
 
 def ver_imagenes_dicom(request):
-    # Recuperar todos los archivos DICOM
     archivos_dicom = ArchivoDicom.objects.all()
-    # Pasar la lista de archivos DICOM a la plantilla
     return render(request, 'ver_imagenes_dicom.html', {'archivos_dicom': archivos_dicom})
 
 
-def buscar_archivos(request):
+def buscar_maquinarias(request):
     nombre = request.GET.get('nombre', '')
     maquinaria = request.GET.get('maquinaria', '')
     
@@ -48,12 +47,24 @@ def buscar_archivos(request):
         archivos = archivos.filter(nombre_maquinaria__icontains=maquinaria)
     
     maquinarias = ArchivoDicom.objects.values_list("nombre_maquinaria", flat=True).distinct()
-    
+    archivos = archivos.values('nombre_paciente', 'nombre_maquinaria').distinct()
+
     context = {
         'archivos': archivos,
         'maquinarias': maquinarias,
         'nombre': nombre,
-        'maquinaria_id': maquinaria,
+        'maquinaria_id': maquinaria,  
     }
     
     return render(request, 'buscar_archivos_dicom.html', context)
+
+def detalles_maquinarias(request, nombre_paciente, nombre_maquinaria):
+    archivos = ArchivoDicom.objects.filter(nombre_paciente=nombre_paciente, nombre_maquinaria=nombre_maquinaria)
+    
+    context = {
+        'archivos': archivos,
+        'nombre_paciente': nombre_paciente,
+        'nombre_maquinaria': nombre_maquinaria,
+    }
+    
+    return render(request, 'detalles_maquinarias_dicom.html', context)
