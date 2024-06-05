@@ -23,7 +23,6 @@ class ArchivoDicom(models.Model):
         self.save()
         ds = pydicom.dcmread(self.archivo.path)
         self.nombre_paciente = ds.PatientName
-
         if hasattr(ds, 'StudyDate'):
             self.fecha = ds.StudyDate
         self.nombre_estudio = ds.InstitutionalDepartmentName if hasattr(ds, 'InstitutionalDepartmentName') else None

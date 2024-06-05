@@ -16,8 +16,8 @@
         <select id="maquinaria" name="maquinaria">
             <option value="">Seleccionar Maquinaria</option>
             {% for maq in maquinarias %}
-                <option value="{{ maq.id }}" {% if maquinaria_id == maq.id|stringformat:"s" %}selected{% endif %}>
-                    {{ maq.nombre }}
+                <option value="{{maq}}" {% if maquinaria_id == maq.id|stringformat:"s" %}selected{% endif %}>
+                    {{ maq }}
                 </option>
             {% endfor %}
         </select>

@@ -36,14 +36,14 @@ def ver_archivos_dicom(request):
 def buscar_archivos(request):
     nombre = request.GET.get('nombre', '')
     archivos = ArchivoDicom.objects.all()
-    
+    maq= ArchivoDicom.objects.values_list("nombre_maquinaria",flat=True).distinct()
     if nombre:
         archivos = archivos.filter(nombre_paciente__icontains=nombre)
-    maquinarias = ArchivoDicom.objects.values_list('nombre_maquinaria', flat=True).distinct()
     context = {
         'archivos': archivos,
-        'maquinarias': maquinarias,
+        'maquinarias': list(maq),
         'nombre': nombre,
     }
     
     return render(request, 'buscar_archivos_dicom.html', context)
+
