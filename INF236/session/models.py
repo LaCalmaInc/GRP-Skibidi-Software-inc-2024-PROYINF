@@ -11,9 +11,9 @@ class ArchivoDicom(models.Model):
     archivo = models.FileField(upload_to='archivos_dicom/')
     nombre_paciente = models.CharField(max_length=255)
     fecha = models.DateField(null=True, blank=True)  # Permitir que la fecha sea nula
-    # Agrega más campos DICOM que desees guardar
-
-    # Campo para la imagen indexada
+    nombre_estudio = models.CharField(max_length=255,null=True)
+    genero = models.CharField(max_length=10,null=True)
+    nombre_maquinaria = models.CharField(max_length=255,null=True)
     imagen_indexada = models.ImageField(upload_to='imagenes_indexadas/', null=True, blank=True)
 
     def __str__(self):
@@ -22,13 +22,13 @@ class ArchivoDicom(models.Model):
     def guardar_metadata(self):
         # Lee los metadatos DICOM
         ds = pydicom.dcmread(self.archivo.path)
-
-        # Guarda la información en el modelo
         self.nombre_paciente = ds.PatientName
+
         if hasattr(ds, 'StudyDate'):
             self.fecha = ds.StudyDate
-        # Agrega más campos según tus necesidades
-
+        self.nombre_estudio = ds.InstitutionalDepartmentName if hasattr(ds, 'InstitutionalDepartmentName') else None
+        self.genero = ds.PatientSex if hasattr(ds, 'PatientSex') else None
+        self.nombre_maquinaria = ds.StationName if hasattr(ds, 'StationName') else None  # Asignar None si no se encuentra el nombre de la maquinaria
         self.save()
 
         # Convierte la imagen DICOM a una imagen indexada y la guarda
@@ -42,10 +42,3 @@ class ArchivoDicom(models.Model):
             img.save(buffer, format='JPEG')
             self.imagen_indexada.save('imagen_indexada.jpg', buffer)
 
-class Maquinaria(models.Model):
-    nombre = models.CharField(max_length=100)   
-
-    def __str__(self):
-        return self.nombre
-    
-    

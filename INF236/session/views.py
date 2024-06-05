@@ -2,7 +2,7 @@
 
 from django.shortcuts import render, redirect
 from .models import ArchivoDicom
-from .forms import ArchivoDicomForm,Busqueda_filtros
+from .forms import ArchivoDicomForm
 
 def cargar_archivo_dicom(request):
     if request.method == 'POST':
@@ -33,21 +33,17 @@ def ver_archivos_dicom(request):
     archivos_dicom = ArchivoDicom.objects.all()
     return render(request, 'ver_archivos_dicom.html', {'archivos_dicom': archivos_dicom})
 
-
-def filtros_dicom(request):
+def buscar_archivos(request):
+    nombre = request.GET.get('nombre', '')
+    archivos = ArchivoDicom.objects.all()
     
-    if request.method == 'GET':
-
-        forms= Busqueda_filtros(request.GET)
-        archivos = ArchivoDicom.objects.all()
-        
-        if forms.is_valid():
-            id_paciente= forms.cleaned_data.get('id_paciente')
-            maquinaria= forms.cleaned_data.get('maquinaria')
-            if id_paciente:
-                archivos= archivos.filter(nombre_paciente__icontains=id_paciente)
-
-            if maquinaria:
-                archivos = archivos.filter(maquinaria__icontainer=maquinaria)
-
-            return render(request,'buscar_archivo_dicom.html', {'archivos_dicom':archivos})
+    if nombre:
+        archivos = archivos.filter(nombre_paciente__icontains=nombre)
+    maquinarias = ArchivoDicom.objects.values_list('nombre_maquinaria', flat=True).distinct()
+    context = {
+        'archivos': archivos,
+        'maquinarias': maquinarias,
+        'nombre': nombre,
+    }
+    
+    return render(request, 'buscar_archivos_dicom.html', context)
