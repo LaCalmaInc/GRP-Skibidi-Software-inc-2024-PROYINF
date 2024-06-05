@@ -67,3 +67,17 @@ def buscar_archivos(request):
     
     return render(request, 'buscar_archivos_dicom.html', context)
 
+def buscar_maquinarias(request):
+    nombre = request.GET.get('nombre', '')
+    maquinarias = []
+    
+    if nombre:
+        archivos = ArchivoDicom.objects.filter(nombre_maquinaria__icontains=nombre)
+        maquinarias = archivos.values_list("nombre_maquinaria" , flat=True).distinct()
+    
+    context = {
+        'maquinarias': list(maquinarias),
+        'nombre': nombre,
+    }
+    
+    return render(request, 'buscar_maquinarias_dicom.html', context)
