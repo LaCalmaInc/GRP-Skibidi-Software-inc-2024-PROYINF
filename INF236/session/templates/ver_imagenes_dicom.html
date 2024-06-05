@@ -34,6 +34,33 @@
             margin-bottom: 10px;
         }
     </style>
+    <container>
+        <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buscar Archivos DICOM</title>
+    <link rel="stylesheet" type="text/css" href="https://bootswatch.com/5/solar/bootstrap.min.css">
+    <style>
+        .form-group-inline {
+            display: inline-block;
+            margin-right: 20px;
+        }
+        .form-control {
+            max-width: 500px;
+        }
+        .form-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .form-container-1{
+            display: flex;
+            align-items: auto;
+        }
+    </style>
+</head>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const imageContainers = document.querySelectorAll('.dicom-container');
@@ -73,8 +100,12 @@
     </script>
 </head>
 <body>
+
     <div class="container">
-        <div class="dicom-container" id="dicom-container-1" style="top: 250px; left: 650px;">
+        <div class = "container" id = "dicom-container-3" style="top: 250px; right:300 px;" >
+            {%include "buscar_archivos_dicom.html"%}
+        </div>
+        <div class="dicom-container" id="dicom-container-1" style="top: 250px; left: 900px;">
             <select class="select-index">
                 {% for i in archivos_dicom %}
                     <option value="{{ forloop.counter0 }}">{{ forloop.counter }}</option>
@@ -91,7 +122,7 @@
             </div>
         </div>
 
-        <div class="dicom-container" id="dicom-container-2" style="top: 250px; left: 1000px;">
+        <div class="dicom-container" id="dicom-container-2" style="top: 250px; left: 1250px;">
             <select class="select-index">
                 {% for i in archivos_dicom %}
                     <option value="{{ forloop.counter0 }}">{{ forloop.counter }}</option>
@@ -108,5 +139,6 @@
             </div>
         </div>
     </div>
+    
 </body>
 </html>

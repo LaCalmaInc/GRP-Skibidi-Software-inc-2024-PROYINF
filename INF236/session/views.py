@@ -28,17 +28,13 @@ def ver_archivos_dicom(request):
     archivos_dicom = ArchivoDicom.objects.all()
     return render(request, 'ver_archivos_dicom.html', {'archivos_dicom': archivos_dicom})
 
-
-
 def ver_imagenes_dicom(request):
     archivos_dicom = ArchivoDicom.objects.all()
     return render(request, 'ver_imagenes_dicom.html', {'archivos_dicom': archivos_dicom})
 
-
 def buscar_maquinarias(request):
     nombre = request.GET.get('nombre', '')
     maquinaria = request.GET.get('maquinaria', '')
-    
     archivos = ArchivoDicom.objects.all()
     
     if nombre:
