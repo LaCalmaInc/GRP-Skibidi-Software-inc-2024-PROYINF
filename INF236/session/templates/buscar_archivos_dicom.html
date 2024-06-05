@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buscar Archivos DICOM</title>
+    <link rel="stylesheet" type="text/css" href="https://bootswatch.com/5/solar/bootstrap.min.css">
+</head>
+<center>
+<body>
+    <h1>Buscar Archivos DICOM</h1>
+    {% csrf_token %}
+    
+    <form method="get" action="">
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" name="nombre" value="{{ nombre }}">
+        
+        <label for="maquinaria">Maquinaria:</label>
+        <select id="maquinaria" name="maquinaria">
+            <option value="" selected disabled = true>Seleccionar Maquinaria</option>
+            {% for maq in maquinarias %}
+                <option value="{{maq}} " {% if maquinaria_id == maq|stringformat:"s" %}selected{% endif %}>
+                    {{ maq }}
+                </option>
+            {% endfor %}
+        </select>
+        
+        <button type="submit">Buscar</button>
+    </form>
+    </center>
+    <h2>Resultados</h2>
+    <ul>
+        {% if archivos %}
+            {% for archivo in archivos %}
+                <li>{{ archivo.nombre_paciente }} - {{ archivo.fecha }} - {{ archivo.maquinaria.nombre }}</li>
+            {% endfor %}
+        {% else %}
+            <li>No se encontraron resultados.</li>
+        {% endif %}
+    </ul>
+</body>
+</html>

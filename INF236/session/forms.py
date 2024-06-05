@@ -1,7 +1,7 @@
 # forms.py
 
 from django import forms
-from .models import ArchivoDicom, Maquinaria
+from .models import ArchivoDicom
 
 
 class MultipleFileInput(forms.ClearableFileInput):
@@ -26,7 +26,9 @@ class ArchivoDicomForm(forms.Form):
 
 
 class Busqueda_filtros(forms.Form):
-    id_paciente= forms.CharField(required=False,max_length=12)
-    maquinaria = forms.ModelChoiceField(queryset=Maquinaria.objects.all(), required =False)
-   
+    id_paciente = forms.CharField(required=False, max_length=12)
+    maquinaria = forms.ModelChoiceField(queryset=ArchivoDicom.objects.all(), required=False, empty_label="Seleccione una maquinaria")
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['maquinaria'].queryset = ArchivoDicom.objects.values_list('nombre_maquinaria', flat=True).distinct()
