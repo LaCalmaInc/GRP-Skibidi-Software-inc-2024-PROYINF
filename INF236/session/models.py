@@ -20,7 +20,7 @@ class ArchivoDicom(models.Model):
         return self.nombre_paciente
 
     def guardar_metadata(self):
-        # Lee los metadatos DICOM
+        self.save()
         ds = pydicom.dcmread(self.archivo.path)
         self.nombre_paciente = ds.PatientName
 
@@ -31,13 +31,13 @@ class ArchivoDicom(models.Model):
         self.nombre_maquinaria = ds.StationName if hasattr(ds, 'StationName') else None  # Asignar None si no se encuentra el nombre de la maquinaria
         self.save()
 
-        # Convierte la imagen DICOM a una imagen indexada y la guarda
+   
         if ds.pixel_array is not None:
             img = Image.fromarray(ds.pixel_array)
-            # Convierte a escala de grises si es necesario
+           
             if img.mode != "L":
                 img = img.convert("L")
-            # Guarda la imagen indexada
+           
             buffer = BytesIO()
             img.save(buffer, format='JPEG')
             self.imagen_indexada.save('imagen_indexada.jpg', buffer)
