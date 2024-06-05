@@ -10,5 +10,4 @@ urlpatterns = [
     path('visualizador/', buscar_maquinarias,name = 'buscar_maquinarias'),
     path('', index, name='index'),
     path('detalles/<str:nombre_paciente>/<str:nombre_maquinaria>/', detalles_maquinarias, name='detalles_maquinarias'),
-
 ]
