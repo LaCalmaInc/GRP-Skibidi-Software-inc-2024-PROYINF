@@ -1,0 +1,62 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analysis enjoyers :V</title>
+    <link rel="stylesheet" type="text/css" href="https://bootswatch.com/5/solar/bootstrap.min.css">
+    <link rel="icon" href="{% static 'images\League of Legends.svg' %}#katman_1" type="image/x-icon">
+</head>
+<body>
+    <div class="container">
+      <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
+        <a href="#" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
+          
+          <img src="{% static 'images\llama2.gif' %}"  height="50" alt="hola">
+          
+          <span class="fs-4" style="color: aliceblue;">DICOM Manager</span>
+        </a>
+  
+        <ul class="nav nav-pills">
+          <li class="nav-item"><a href="#" class="nav-link active" aria-current="page">Home</a></li>
+          <li class="nav-item"><a href="#" class="nav-link">Features</a></li>
+          <li class="nav-item"><a href="#" class="nav-link">Pricing</a></li>
+          <li class="nav-item"><a href="#" class="nav-link">FAQs</a></li>
+          <li class="nav-item"><a href="#" class="nav-link">About</a></li>
+        </ul>
+      </header>
+    </div>
+
+    <br>
+    <div class="container">
+      <h2 style="color: aliceblue;">Bienvenido! Que deseas hacer?</h2>
+      <br>
+      <div class="container d-flex align-items-center">
+        <div class="container d-flex flex-column align-items-center">
+          <h3 style="text-align: center;">Cargar Archivos</h3>
+          <button type="button" class="btn btn-light btn-lg"><a href="{% url 'cargar_archivo_dicom' %}"><img src="{% static 'images\upload.png' %}" alt="Cargar" height="200"></a></button>
+        </div>
+        <div class="container d-flex flex-column align-items-center">
+          <h3 style="text-align: center;">Visualizar Archivos</h3>
+          <button type="button" class="btn btn-light btn-lg"><a href="#"><img src="{% static 'images\copy-image.png' %}" alt="Cargar" height="200"></a></button>
+        </div>
+      </div>
+      
+    </div>
+    <br>
+    <br>
+    <div class="container">
+      <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
+        <p class="col-md-4 mb-0 text-body-secondary">© 2024 Analysis Enjoyers, Inc</p>
+    
+        <a href="#" class="col-md-4 d-flex align-items-center justify-content-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
+          <img src="{% static 'images\llama2.gif' %}"  height="50" alt="hola">
+        </a>
+    
+        
+      </footer>
+    </div>
+      
+</body>
+</html>
