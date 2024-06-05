@@ -36,7 +36,7 @@ def buscar_maquinarias(request):
     nombre = request.GET.get('nombre', '')
     maquinaria = request.GET.get('maquinaria', '')
     archivos = ArchivoDicom.objects.all()
-    
+    archivos_dicom = ArchivoDicom.objects.all()
     if nombre:
         archivos = archivos.filter(nombre_paciente__icontains=nombre)
     if maquinaria:
@@ -49,10 +49,11 @@ def buscar_maquinarias(request):
         'archivos': archivos,
         'maquinarias': maquinarias,
         'nombre': nombre,
-        'maquinaria_id': maquinaria,  
+        'maquinaria_id': maquinaria, 
+        'archivos_dicom': archivos_dicom, 
     }
     
-    return render(request, 'buscar_archivos_dicom.html', context)
+    return render(request, 'ver_imagenes_dicom.html', context)
 
 def detalles_maquinarias(request, nombre_paciente, nombre_maquinaria):
     archivos = ArchivoDicom.objects.filter(nombre_paciente=nombre_paciente, nombre_maquinaria=nombre_maquinaria)
