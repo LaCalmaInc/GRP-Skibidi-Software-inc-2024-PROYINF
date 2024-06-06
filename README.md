@@ -9,4 +9,10 @@
 
 Puede acceder a la Wiki desde el siguiente [enlace](https://github.com/LaCalmaInc/GRP-Analysis-Enjoyers-2024-PROYINF/wiki)
 
+## Video H4
+
+https://usmcl-my.sharepoint.com/:v:/g/personal/carlos_veraq_usm_cl/EXOjLNqE4FdKv-wMe9w1M_QBtgqMgAGiX5kfslLMjiZoOQ?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=p1DBkO
+
+
+
 
