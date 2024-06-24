@@ -2,7 +2,8 @@
 
 from django.shortcuts import render, redirect,get_object_or_404
 from .models import ArchivoDicom
-from .forms import ArchivoDicomForm, Busqueda_filtros
+from .forms import ArchivoDicomForm
+from datetime import datetime
 import pydicom
 from django.urls import reverse
 
@@ -65,3 +66,30 @@ def detalles_maquinarias(request, nombre_paciente, nombre_maquinaria):
     }
     
     return render(request, 'detalles_maquinarias_dicom.html', context)
+
+
+def listar_dias(request):
+    maquina_filtro = request.GET.get('maquina', None)
+    archivos = ArchivoDicom.objects.all().order_by('-fecha_ingreso')
+    
+    if maquina_filtro:
+        archivos = archivos.filter(nombre_maquinaria=maquina_filtro)
+    
+    dias = archivos.values('fecha_ingreso').distinct().order_by('-fecha_ingreso')
+    
+    context = {
+        'dias': dias,
+        'maquina_filtro': maquina_filtro
+    }
+    return render(request, 'listar_dias.html', context)
+
+def archivos_por_dia(request, fecha):
+    fecha_filtro = datetime.strptime(fecha, '%Y-%m-%d').date()
+    archivos = ArchivoDicom.objects.filter(fecha_ingreso=fecha_filtro).order_by('-fecha_ingreso')
+    context = {
+        'archivos': archivos,
+        'fecha_filtro': fecha_filtro
+    }
+    return render(request, 'inv.html', context)
+def index(request):
+    return render(request, 'index.html')

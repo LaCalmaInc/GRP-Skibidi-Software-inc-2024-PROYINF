@@ -15,6 +15,7 @@ class ArchivoDicom(models.Model):
     genero = models.CharField(max_length=10,null=True)
     nombre_maquinaria = models.CharField(max_length=255,null=True)
     imagen_indexada = models.ImageField(upload_to='imagenes_indexadas/', null=True, blank=True)
+    fecha_ingreso = models.DateField(auto_now_add=True)
 
     def __str__(self):
         return self.nombre_paciente

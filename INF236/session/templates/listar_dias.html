@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Archivos DICOM por Día de Ingreso</title>
+    <link rel="stylesheet" type="text/css" href="https://bootswatch.com/5/solar/bootstrap.min.css">
+    {% load static %}
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .folder {
+            padding: 10px;
+            border: 3px solid #00ec9e;
+            margin: 5px;
+            display: inline-block;
+            width: 200px;
+            text-align: center;
+            cursor: pointer;
+            background-color: #00ec9e;
+            border-radius: 10%;
+        }
+        .filter-form {
+            margin-bottom: 20px;
+        }
+        .styled-button {
+        background-color: #4CAF50; 
+        border: none; 
+        color: white; 
+        padding: 10px 20px; 
+        text-align: center; 
+        text-decoration: none; 
+        display: inline-block; 
+        font-size: 16px; 
+        margin: 4px 2px; 
+        cursor: pointer; 
+        border-radius: 4px; 
+        box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1); 
+        } 
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
+          <a href="#" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
+            
+            <img src="{% static 'images\llama2.gif' %}"  height="50" alt="hola">
+            
+            <span class="fs-4" style="color: aliceblue;">DICOM Manager</span>
+          </a>
+    
+          <ul class="nav nav-pills">
+            <li class="nav-item"><a href="{% url 'index' %}" class="nav-link active" aria-current="page">Home</a></li>
+            <li class="nav-item"><a href="#" class="nav-link">Features</a></li>
+            <li class="nav-item"><a href="#" class="nav-link">Pricing</a></li>
+            <li class="nav-item"><a href="#" class="nav-link">FAQs</a></li>
+            <li class="nav-item"><a href="#" class="nav-link">About</a></li>
+          </ul>
+        </header>
+      </div>
+  
+      <br>
+      <div class="container">
+    <h1>Archivos DICOM por Día de Ingreso</h1>
+    <div class="filter-form">
+
+    </div>
+    <div class="folders">
+        {% for dia in dias %}
+            <div class="folder" onclick="window.location.href='{% url 'archivos_por_dia' dia.fecha_ingreso %}'">
+                <p1 style="font-weight: bolder;">{{ dia.fecha_ingreso }}</p1>
+            </div>
+        {% endfor %}
+        
+    </div>
+    <a href="{% url 'index' %}" class="styled-button">Volver</a>
+    </div>
+    <div class="container">
+        <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
+          <p class="col-md-4 mb-0 text-body-secondary">© 2024 Analysis Enjoyers, Inc</p>
+      
+          <a href="#" class="col-md-4 d-flex align-items-center justify-content-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
+            <img src="{% static 'images\llama2.gif' %}"  height="50" alt="hola">
+          </a>
+      
+          
+        </footer>
+      </div>
+</body>
+</html>
+
