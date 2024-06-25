@@ -7,6 +7,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Detalles Archivos DICOM</title>
     <link rel="stylesheet" type="text/css" href="https://bootswatch.com/5/solar/bootstrap.min.css">
+    <style>
+      .zoom-container {
+          position: static;
+          overflow: hidden;
+          width: 300px;  /* Ajusta el tamaño inicial del contenedor según sea necesario */
+          height: 200px; /* Ajusta el tamaño inicial del contenedor según sea necesario */
+          display: flex;
+          justify-content: center;
+          align-items: center;
+      }
+  
+  
+      .zoom-image {
+          transition: transform 0.2s ease;
+          max-width: 100%; /* Asegura que la imagen se ajuste correctamente */
+          height: auto; /* Ajusta la altura automáticamente */
+      }
+  
+      .zoom-container.zoomed .zoom-image {
+          transform: scale(2);  /* Ajusta el nivel de zoom según sea necesario */
+          transform-origin: center;
+      }
+    </style>
+    
 </head>
 <body>
     <div class="container">
@@ -40,23 +64,63 @@
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th>Nombre del Paciente</th>
+                    <th>Indice</th>
+                    <th>Modalidad</th>
                     <th>Fecha de Atención</th>
-                    <th>Nombre de la Maquinaria</th>
+                    <th>Institucion</th>
+                    <th>Hora atencion</th>
+                    <th>Fabricante</th>
+                    <th>Parte del cuerpo</th>
+                    <th>Genero</th>
+                    <th>Imagen</th>
                 </tr>
             </thead>
             <tbody>
                 {% for archivo in archivos %}
                     <tr>
-                        <td>{{ archivo.nombre_paciente }}</td>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ archivo.modality }}</td>
                         <td>{{ archivo.fecha }}</td>
-                        <td>{{ archivo.nombre_maquinaria }}</td>
+                        <td>{{ archivo.institution_name }}</td>
+                        <td>{{ archivo.study_time }}</td>
+                        <td>{{ archivo.manufacturer }}</td>
+                        <td>{{ archivo.body_part_examined }}</td>
+                        <td>{{ archivo.genero }}</td>
+                        <td>
+                          <div class="zoom-container">
+                            <img class="zoom-image" src="{{ archivo.imagen_indexada.url }}" alt="Imagen indexada" style="max-width: 50%;">
+                          </div>
+                        </td>
                     </tr>
                 {% endfor %}
+                
                 <p>Total de archivos: {{ archivos|length }}</p>
             </tbody>
         </table>
     </div>
+    <script>
+      document.querySelectorAll('.zoom-container').forEach(zoomContainer => {
+          zoomContainer.addEventListener('mousemove', function(e) {
+              const { left, top, width, height } = this.getBoundingClientRect();
+              const mouseX = e.clientX - left;
+              const mouseY = e.clientY - top;
+
+              const offsetX = mouseX / width * 100;
+              const offsetY = mouseY / height * 100;
+
+              const image = this.querySelector('.zoom-image');
+              image.style.transformOrigin = `${offsetX}% ${offsetY}%`;
+          });
+
+          zoomContainer.addEventListener('mouseenter', function() {
+              this.classList.add('zoomed');
+          });
+
+          zoomContainer.addEventListener('mouseleave', function() {
+              this.classList.remove('zoomed');
+          });
+      });
+  </script>
     <div class="container">
         <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
           <p class="col-md-4 mb-0 text-body-secondary">© 2024 Analysis Enjoyers, Inc</p>
