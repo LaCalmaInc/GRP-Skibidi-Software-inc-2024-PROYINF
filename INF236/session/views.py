@@ -36,33 +36,48 @@ def ver_imagenes_dicom(request):
 def buscar_maquinarias(request):
     nombre = request.GET.get('nombre', '')
     maquinaria = request.GET.get('maquinaria', '')
+    estudio = request.GET.get('estudio','')
+    protocolo = request.GET.get('protocolo','')
     archivos = ArchivoDicom.objects.all()
     archivos_dicom = ArchivoDicom.objects.all()
     if nombre:
         archivos = archivos.filter(nombre_paciente__icontains=nombre)
     if maquinaria:
         archivos = archivos.filter(nombre_maquinaria__icontains=maquinaria)
+    if estudio:
+        archivos = archivos.filter(nombre_estudio__icontains=estudio)
+    if protocolo:
+        archivos = archivos.filter(protocol_name__icontains=protocolo)
     
     maquinarias = ArchivoDicom.objects.values_list("nombre_maquinaria", flat=True).distinct()
-    archivos = archivos.values('nombre_paciente', 'nombre_maquinaria').distinct()
+    estudios = ArchivoDicom.objects.values_list("nombre_estudio", flat=True).distinct()
+    protocolos = ArchivoDicom.objects.values_list("protocol_name", flat=True).distinct()
+    archivos = archivos.values('nombre_paciente', 'nombre_maquinaria','nombre_estudio','protocol_name').distinct()
+    
 
     context = {
         'archivos': archivos,
         'maquinarias': maquinarias,
+        'estudios':estudios,
+        'protocolos': protocolos,
         'nombre': nombre,
+        'protocolo_id':protocolo,
         'maquinaria_id': maquinaria, 
+        'estudio_id': estudio,
         'archivos_dicom': archivos_dicom, 
     }
     
     return render(request, 'ver_imagenes_dicom.html', context)
 
-def detalles_maquinarias(request, nombre_paciente, nombre_maquinaria):
-    archivos = ArchivoDicom.objects.filter(nombre_paciente=nombre_paciente, nombre_maquinaria=nombre_maquinaria)
+def detalles_maquinarias(request, nombre_paciente, nombre_maquinaria, nombre_estudio, protocol_name):
+    archivos = ArchivoDicom.objects.filter(nombre_paciente=nombre_paciente, nombre_maquinaria=nombre_maquinaria, nombre_estudio = nombre_estudio, protocol_name = protocol_name)
     
     context = {
         'archivos': archivos,
         'nombre_paciente': nombre_paciente,
         'nombre_maquinaria': nombre_maquinaria,
+        'protocol_name':protocol_name,
+        'nombre_estudio':nombre_estudio
     }
     
     return render(request, 'detalles_maquinarias_dicom.html', context)
@@ -93,3 +108,6 @@ def archivos_por_dia(request, fecha):
     return render(request, 'inv.html', context)
 def index(request):
     return render(request, 'index.html')
+
+def detalleImagen(request):
+    return render(request,'detalle_imagen.html')

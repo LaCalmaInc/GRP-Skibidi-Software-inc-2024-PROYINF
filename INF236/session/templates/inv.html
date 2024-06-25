@@ -62,7 +62,10 @@
       <br>
       <div class="container">
     <h1>Archivos DICOM del {{ fecha_filtro }}</h1>
-    <a href="{% url 'listar_dias' %}" class="styled-button">Volver</a>
+    <button class="btn btn-primary "> 
+      <a href="{% url 'listar_dias' %}" style="text-decoration: none; color: aliceblue;">Volver</a>    
+    </button>
+    
     <div class="archivos">
         {% for archivo in archivos %}
             <div class="archivo">

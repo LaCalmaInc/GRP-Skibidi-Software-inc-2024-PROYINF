@@ -46,45 +46,6 @@
             align-items: auto;
         }
     </style>
-</head>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const imageContainers = document.querySelectorAll('.dicom-container');
-
-            imageContainers.forEach((container, containerIndex) => {
-                let currentIndex = 0;
-                const images = container.querySelectorAll('.dicom-image');
-                const totalImages = images.length;
-                
-                function showImage(index) {
-                    images.forEach((img, i) => {
-                        img.classList.remove('active');
-                        if (i === index) {
-                            img.classList.add('active');
-                        }
-                    });
-                }
-
-                container.querySelector('.next-btn').addEventListener('click', function() {
-                    currentIndex = (currentIndex + 1) % totalImages;
-                    showImage(currentIndex);
-                });
-
-                container.querySelector('.prev-btn').addEventListener('click', function() {
-                    currentIndex = (currentIndex - 1 + totalImages) % totalImages;
-                    showImage(currentIndex);
-                });
-
-                container.querySelector('.select-index').addEventListener('change', function(event) {
-                    currentIndex = parseInt(event.target.value, 10);
-                    showImage(currentIndex);
-                });
-
-                showImage(currentIndex);
-            });
-        });
-    </script>
-</head>
 <body>
     <div class="container">
         <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
@@ -128,6 +89,28 @@
                                 {% endfor %}
                             </select>
                         </div>
+                        <div class="form-group form-group-inline">
+                            <label for="estudiO">Estudio:</label>
+                            <select id="estudiO" name="estudio" class="form-control">
+                                <option value="" selected disabled>Seleccionar Estudio</option>
+                                {% for est in estudios %}
+                                    <option value="{{ est }}" {% if estudio_id == est %}selected{% endif %}>
+                                        {{ est }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group form-group-inline">
+                            <label for="prot">Protocolo:</label>
+                            <select id="prot" name="protocolo" class="form-control">
+                                <option value="" selected disabled>Seleccionar Protocolo</option>
+                                {% for pro in protocolos %}
+                                    <option value="{{ pro }}" {% if protocolo_id == pro %}selected{% endif %}>
+                                        {{ pro }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
                         <button type="submit" class="btn btn-primary">Buscar</button>
                     </form>
                 </div>
@@ -141,13 +124,17 @@
                             <tr>
                                 <th>Nombre del Paciente</th>
                                 <th>Nombre de la Maquinaria</th>
+                                <th>Estudio</th>
+                                <th>Protocolo</th>
                             </tr>
                         </thead>
                         <tbody>
                             {% for archivo in archivos %}
                                 <tr>
-                                    <td><a href="{% url 'detalles_maquinarias' archivo.nombre_paciente archivo.nombre_maquinaria %}">{{ archivo.nombre_paciente }}</a></td>
+                                    <td><a href="{% url 'detalles_maquinarias' archivo.nombre_paciente archivo.nombre_maquinaria archivo.nombre_estudio archivo.protocol_name%}">{{ archivo.nombre_paciente }}</a></td>
                                     <td>{{ archivo.nombre_maquinaria }}</td>
+                                    <td>{{ archivo.nombre_estudio }}</td>
+                                    <td>{{ archivo.protocol_name }}</td>
                                 </tr>
                             {% endfor %}
                         </tbody>
@@ -158,41 +145,8 @@
             </div>
             {% endif %}
         </div>
-        <div class="container d-flex align-items-center">
-            <div class="dicom-container" id="dicom-container-1" style=" left: 900px;">
-                <select class="select-index">
-                    {% for i in archivos_dicom %}
-                        <option value="{{ forloop.counter0 }}">{{ forloop.counter }}</option>
-                    {% endfor %}
-                </select>
-                {% for archivo_dicom in archivos_dicom %}
-                    <div class="dicom-image">
-                        <img src="{{ archivo_dicom.imagen_indexada.url }}" alt="Imagen DICOM" style="width: 300px;">
-                    </div>
-                {% endfor %}
-                <div class="navigation-buttons">
-                    <button class="prev-btn">Anterior</button>
-                    <button class="next-btn">Siguiente</button>
-                </div>
-            </div>
-    
-            <div class="dicom-container" id="dicom-container-2" style="left: 1250px;">
-                <select class="select-index">
-                    {% for i in archivos_dicom %}
-                        <option value="{{ forloop.counter0 }}">{{ forloop.counter }}</option>
-                    {% endfor %}
-                </select>
-                {% for archivo_dicom in archivos_dicom %}
-                    <div class="dicom-image">
-                        <img src="{{ archivo_dicom.imagen_indexada.url }}" alt="Imagen DICOM" style="width: 300px;">
-                    </div>
-                {% endfor %}
-                <div class="navigation-buttons">
-                    <button class="prev-btn">Anterior</button>
-                    <button class="next-btn">Siguiente</button>
-                </div>
-            </div>
-        </div>
+        
+        
     </div>
     <div class="container">
         <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
