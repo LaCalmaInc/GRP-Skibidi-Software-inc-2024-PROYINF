@@ -1,0 +1,138 @@
+{% load static %}
+{% load crispy_forms_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visualizador de Imágenes DICOM</title>
+    <link rel="stylesheet" type="text/css" href="https://bootswatch.com/5/solar/bootstrap.min.css">
+    <style>
+        .dicom-container {
+            
+            display: flex;
+            flex-direction: column;
+            align-items: auto;
+        }
+        .dicom-image {
+            display: none;
+            margin-bottom: 10px;
+        }
+        .dicom-image.active {
+            display: block;
+        }
+        .navigation-buttons {
+            margin-top: 10px;
+        }
+        .select-index {
+            margin-bottom: 5px;
+            width:fit-content
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
+        <a href="{% url 'index' %}" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
+            <img src="{% static 'images/llama2.gif' %}" height="50" alt="hola">
+            <span class="fs-4" style="color: aliceblue;">DICOM Manager</span>
+        </a>
+        <ul class="nav nav-pills">
+            <li class="nav-item"><a href="{% url 'index' %}" class="nav-link active" aria-current="page">Home</a></li>
+            <li class="nav-item"><a href="#" class="nav-link">Features</a></li>
+            <li class="nav-item"><a href="#" class="nav-link">Pricing</a></li>
+            <li class="nav-item"><a href="#" class="nav-link">FAQs</a></li>
+            <li class="nav-item"><a href="#" class="nav-link">About</a></li>
+        </ul>
+    </header>
+</div>
+<center>
+    <h1>Visualizador de Imágenes DICOM</h1>
+    <h2>Paciente: {{ nombre_paciente }}</h2>
+    <h3>Maquinaria: {{ nombre_maquinaria }}</h3>
+</center>
+<div class="container d-flex align-items-center">
+    <div class="dicom-container" id="dicom-container-1" style=" left: 900px;">
+        <select class="select-index">
+            {% for i in archivos %}
+                <option value="{{ forloop.counter0 }}">{{ forloop.counter }}</option>
+            {% endfor %}
+        </select>
+        {% for archivo in archivos%}
+                <div class="dicom-image">
+                    <img src="{{ archivo.imagen_indexada.url }}" alt="Imagen DICOM" style="width: 100;">
+                </div>
+
+        {% endfor %}
+        <div class="navigation-buttons">
+            <button class="prev-btn">Anterior</button>
+            <button class="next-btn">Siguiente</button>
+        </div>
+    </div>
+
+    <div class="dicom-container" id="dicom-container-2" style="left: 1250px;">
+        <select class="select-index">
+            {% for i in archivos %}
+                <option value="{{ forloop.counter0 }}">{{ forloop.counter }}</option>
+            {% endfor %}
+        </select>
+        {% for archivo in archivos %}
+            {% if archivo.imagen_indexada %}
+                <div class="dicom-image">
+                    <img src="{{ archivo.imagen_indexada.url }}" alt="Imagen DICOM" style="width: 200;">
+                </div>
+            {% endif %}
+        {% endfor %}
+        <div class="navigation-buttons">
+            <button class="prev-btn">Anterior</button>
+            <button class="next-btn">Siguiente</button>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
+        <p class="col-md-4 mb-0 text-body-secondary">© 2024 Analysis Enjoyers, Inc</p>
+        <a href="#" class="col-md-4 d-flex align-items-center justify-content-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
+            <img src="{% static 'images/llama2.gif' %}" height="50" alt="hola">
+        </a>
+    </footer>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const imageContainers = document.querySelectorAll('.dicom-container');
+
+        imageContainers.forEach((container, containerIndex) => {
+            let currentIndex = 0;
+            const images = container.querySelectorAll('.dicom-image');
+            const totalImages = images.length;
+
+            function showImage(index) {
+                images.forEach((img, i) => {
+                    img.classList.remove('active');
+                    if (i === index) {
+                        img.classList.add('active');
+                    }
+                });
+            }
+
+            container.querySelector('.next-btn').addEventListener('click', function() {
+                currentIndex = (currentIndex + 1) % totalImages;
+                showImage(currentIndex);
+            });
+
+            container.querySelector('.prev-btn').addEventListener('click', function() {
+                currentIndex = (currentIndex - 1 + totalImages) % totalImages;
+                showImage(currentIndex);
+            });
+
+            container.querySelector('.select-index').addEventListener('change', function(event) {
+                currentIndex = parseInt(event.target.value, 10);
+                showImage(currentIndex);
+            });
+
+            showImage(currentIndex);
+        });
+    });
+</script>
+</body>
+</html>

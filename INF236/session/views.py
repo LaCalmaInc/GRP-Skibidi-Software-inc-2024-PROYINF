@@ -6,6 +6,10 @@ from .forms import ArchivoDicomForm
 from datetime import datetime
 import pydicom
 from django.urls import reverse
+from django.core.paginator import Paginator
+from django.core.serializers import serialize
+from django.http import JsonResponse
+import json
 
 def cargar_archivo_dicom(request):
     if request.method == 'POST':
@@ -48,6 +52,12 @@ def buscar_maquinarias(request):
         archivos = archivos.filter(nombre_estudio__icontains=estudio)
     if protocolo:
         archivos = archivos.filter(protocol_name__icontains=protocolo)
+
+    
+     
+    archivos_serializados = serialize('json', archivos)
+    archivos_json = json.loads(archivos_serializados)
+    
     
     maquinarias = ArchivoDicom.objects.values_list("nombre_maquinaria", flat=True).distinct()
     estudios = ArchivoDicom.objects.values_list("nombre_estudio", flat=True).distinct()
@@ -81,6 +91,26 @@ def detalles_maquinarias(request, nombre_paciente, nombre_maquinaria, nombre_est
     }
     
     return render(request, 'detalles_maquinarias_dicom.html', context)
+
+def visualizar_fotos_filtradas(request, nombre_paciente, nombre_maquinaria, nombre_estudio, protocol_name):
+    archivos = ArchivoDicom.objects.filter(
+        nombre_paciente=nombre_paciente, 
+        nombre_maquinaria=nombre_maquinaria, 
+        nombre_estudio=nombre_estudio, 
+        protocol_name=protocol_name
+    )
+
+    context = {
+        'archivos': archivos,
+        'nombre_paciente': nombre_paciente,
+        'nombre_maquinaria': nombre_maquinaria,
+        'protocol_name': protocol_name,
+        'nombre_estudio': nombre_estudio
+    }
+    
+    return render(request, 'visualizar_fotos_filtradas.html', context)
+
+
 
 
 def listar_dias(request):
