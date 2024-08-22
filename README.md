@@ -2,7 +2,7 @@
 
 - Carlos Vera Quezada - 202173564-k
 - Alvaro Guzman Soto - 202173538-0
-- Diego Ramirez Rojas - 202073534-4
+- Patricio Leigh Gandulfo - 202156522-1 (nuevo integrante 2024-2)
 - Javier Gomez Alvarez - 202173519-4
   
 ## Wiki
