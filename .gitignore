@@ -1,2 +1,11 @@
 # Entorno Virtual
 env/
+
+# Python
+*.pyc
+__pycache__/
+
+# Django
+*.sqlite3
+
+
