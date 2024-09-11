@@ -1,45 +1,24 @@
-<!-- En tu archivo cargar_archivo_dicom.html -->
+{% extends 'base.html' %}
 {% load crispy_forms_tags %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Cargar Archivo DICOM</title>
-    <link rel="stylesheet" type="text/css" href="https://bootswatch.com/5/solar/bootstrap.min.css">
-</head>
-<body>
-    <div class="container">
-        <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
-          <a href="{% url 'index' %}" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
-            
-            <img src="{% static 'images\llama2.gif' %}"  height="50" alt="hola">
-            
-            <span class="fs-4" style="color: aliceblue;">DICOM Manager</span>
-          </a>
-    
-          <ul class="nav nav-pills">
-            <li class="nav-item"><a href="{% url 'index' %}" class="nav-link active" aria-current="page">Home</a></li>
-            <li class="nav-item"><a href="#" class="nav-link">Features</a></li>
-            <li class="nav-item"><a href="#" class="nav-link">Pricing</a></li>
-            <li class="nav-item"><a href="#" class="nav-link">FAQs</a></li>
-            <li class="nav-item"><a href="#" class="nav-link">About</a></li>
-          </ul>
-        </header>
-      </div>
-    <br>
-    <div class="container">
-        <h2>Cargar Archivo DICOM</h2>
-        <form method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-            {{ form|crispy }}
-            <button class="btn btn-success" type="submit">Cargar</button>
-        </form>
-        <br>
-        <button class="btn btn-primary"><a style="color: aliceblue; text-decoration: none;" href="{% url 'buscar_maquinarias' %}">Ver archivos</a></button>
-        <br>
-        <br>
-        <button class="btn btn-primary"><a style="color: aliceblue; text-decoration: none;" href="{% url 'index' %}">Volver Inicio</a></button>
-    </div>
-</body>
-</html>
+
+{% block title %}Cargar Archivo DICOM{% endblock %}
+
+{% block content %}
+
+<h2>Cargar Archivo DICOM</h2>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form|crispy }}
+    <button class="btn btn-success" type="submit">Cargar</button>
+</form>
+<br>
+<button class="btn btn-primary"><a style="color: aliceblue; text-decoration: none;" href="{% url 'buscar_maquinarias' %}">Ver archivos</a></button>
+<br>
+<br>
+<button class="btn btn-primary"><a style="color: aliceblue; text-decoration: none;" href="{% url 'index' %}">Volver Inicio</a></button>
+
+{% endblock %}
+
+
+
