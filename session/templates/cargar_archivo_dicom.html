@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block title %}Cargar Archivo DICOM{% endblock %}
+
+{% block content %}
+
+<h2>Cargar Archivo DICOM</h2>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form|crispy }}
+    <button class="btn btn-success" type="submit">Cargar</button>
+</form>
+<br>
+<button class="btn btn-primary"><a style="color: aliceblue; text-decoration: none;" href="{% url 'buscar_maquinarias' %}">Ver archivos</a></button>
+<br>
+<br>
+<button class="btn btn-primary"><a style="color: aliceblue; text-decoration: none;" href="{% url 'index' %}">Volver Inicio</a></button>
+
+{% endblock %}
+
+
+
