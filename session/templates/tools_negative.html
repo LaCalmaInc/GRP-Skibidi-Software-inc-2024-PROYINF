@@ -86,7 +86,7 @@
             <div class="dicom-image">
                 <img id="dicomImage{{ forloop.counter }}" src="{{ archivo.imagen_indexada.url }}" alt="Imagen de {{ nombre_paciente }}">
                 <div class="navigation-buttons d-flex justify-content-center">
-                    <button onclick="toggleNegativo('dicomImage{{ forloop.counter }}')">Aplicar/Eliminar Negativo</button>
+                    <button class="btn btn-prev mx-3" onclick="toggleNegativo('dicomImage{{ forloop.counter }}')">Aplicar/Eliminar Negativo</button>
                 </div>   
             </div>
         {% endfor %}
