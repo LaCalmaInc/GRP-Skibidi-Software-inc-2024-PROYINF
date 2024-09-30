@@ -16,8 +16,7 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.db import IntegrityError
 from django.contrib.auth.models import User
 
-
-
+@login_required
 def cargar_archivo_dicom(request):
     if request.method == 'POST':
         form = ArchivoDicomForm(request.POST, request.FILES)
@@ -55,6 +54,8 @@ def signout(request):
     logout(request)
     return redirect('home')
 
+def tools(request):
+    return render(request,'tools.html')
 
 def signin(request):
     if request.method == 'GET':
@@ -77,11 +78,12 @@ def home(request):
 def index(request):
     return render(request, 'index.html')
 
-
+@login_required
 def ver_archivos_dicom(request):
     archivos_dicom = ArchivoDicom.objects.all()
     return render(request, 'ver_archivos_dicom.html', {'archivos_dicom': archivos_dicom})
 
+@login_required
 def ver_imagenes_dicom(request):
     archivos_dicom = ArchivoDicom.objects.all()
     return render(request, 'ver_imagenes_dicom.html', {'archivos_dicom': archivos_dicom})
@@ -190,3 +192,4 @@ def index(request):
 
 def detalleImagen(request):
     return render(request,'detalle_imagen.html')
+

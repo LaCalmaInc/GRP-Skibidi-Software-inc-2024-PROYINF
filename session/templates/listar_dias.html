@@ -43,9 +43,6 @@
   </style>
 </head>
 <h1>Archivos DICOM por Día de Ingreso</h1>
-<div class="filter-form">
-
-</div>
 <div class="folders">
   {% for dia in dias %}
   <button class="btn btn-success" onclick="window.location.href='{% url 'archivos_por_dia' dia.fecha_ingreso %}'">
@@ -59,13 +56,4 @@
 </button>
 
 
-
 {% endblock %}
-
-
-
-
-
-
-
-

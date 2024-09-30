@@ -1,6 +1,5 @@
 from django.urls import path
-from .views import cargar_archivo_dicom, ver_archivos_dicom,buscar_maquinarias,index,detalles_maquinarias,archivos_por_dia,listar_dias,index,detalleImagen,visualizar_fotos_filtradas, home, signup, signout, signin
-
+from .views import cargar_archivo_dicom, ver_archivos_dicom,buscar_maquinarias,index,detalles_maquinarias,archivos_por_dia,listar_dias,index,detalleImagen,tools,visualizar_fotos_filtradas, home, signup, signout, signin
 
 urlpatterns = [
     path('cargar/', cargar_archivo_dicom, name='cargar_archivo_dicom'),
@@ -16,5 +15,6 @@ urlpatterns = [
     path('logout/', signout, name='logout'),
     path('signin/', signin, name='signin'),
     path('index/', index, name='index'),
-
+    path('tools/',tools,name='tools')
+    
 ]
