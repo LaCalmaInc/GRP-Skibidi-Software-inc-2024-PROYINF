@@ -17,8 +17,7 @@ urlpatterns = [
     path('signin/', signin, name='signin'),
     path('index/', index, name='index'),
     path('tools/',tools,name='tools'),
-    path('imagen_negativa/<int:archivo_id>/', aplicar_negativo_view, name='imagen_negativa'),
-    path('ver_imagen_negativa/<int:archivo_id>/', ver_imagen_negativa, name='ver_imagen_negativa'),
+    path('paciente/<str:nombre_paciente>/imagenes/', ver_imagen_negativa, name='ver_imagenes_paciente'),
 
 ]
 

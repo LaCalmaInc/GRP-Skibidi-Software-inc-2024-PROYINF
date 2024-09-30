@@ -18,6 +18,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.db import IntegrityError
 from django.contrib.auth.models import User
+from .models import Image
 
 @login_required
 def cargar_archivo_dicom(request):
@@ -70,20 +71,15 @@ def signin(request):
         login(request, user)
         return redirect('index')
 
-def aplicar_negativo_view(request, archivo_id):
-    
-    archivo_dicom = get_object_or_404(ArchivoDicom, id=archivo_id)
-    archivo_dicom.aplicar_negativo()
-    return redirect(request,'ver_imagen_negativa', archivo_id=archivo_dicom.id) #cambiar html
- 
-def ver_imagen_negativa(request, archivo_id):
-    archivo_dicom = get_object_or_404(ArchivoDicom, id=archivo_id)
+@login_required
+def ver_imagen_negativa(request, nombre_paciente):
+    archivos = ArchivoDicom.objects.filter(nombre_paciente=nombre_paciente, imagen_indexada__isnull=False)
 
-    ruta_imagen_negativa = os.path.join(settings.MEDIA_ROOT, archivo_dicom.imagen_indexada.name)
+    return render(request, 'tools_negative.html', {
+        'nombre_paciente': nombre_paciente,
+        'archivos': archivos,
+    })
 
-    with open(ruta_imagen_negativa, 'rb') as imagen:
-        return HttpResponse(imagen.read(), content_type='image/jpeg') #aplicar response en html
-    
 def home(request):
     return render(request, 'home.html')
 

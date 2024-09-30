@@ -106,7 +106,7 @@
                         <tbody>
                             {% for archivo in archivos %}
                                 <tr>
-                                    <td><a href="{% url 'detalles_maquinarias' archivo.nombre_paciente archivo.nombre_maquinaria archivo.nombre_estudio archivo.protocol_name%}">{{ archivo.nombre_paciente }}</a></td>
+                                    <td><a href="{% url 'ver_imagenes_paciente' archivo.nombre_paciente %}">{{ archivo.nombre_paciente }}</a></td>
                                     <td>{{ archivo.nombre_maquinaria }}</td>
                                 </tr>
                             {% endfor %}
