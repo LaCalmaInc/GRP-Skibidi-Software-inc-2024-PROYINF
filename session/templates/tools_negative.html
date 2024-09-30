@@ -1,0 +1,39 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+</html>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Nombre del Paciente</th>
+            <th>Nombre de la Maquinaria</th>
+            <th>Imagen Negativa</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for archivo in archivos_dicom %}
+        <tr>
+            <td>{{ archivo.nombre_paciente }}</td>
+            <td>{{ archivo.nombre_maquinaria }}</td>
+            <td>
+                {% if archivo.imagen_indexada %}
+                <img src="{{ archivo.imagen_indexada.url }}" alt="Imagen Negativa" style="width: 150px;">
+                {% else %}
+                Sin imagen
+                {% endif %}
+            </td>
+            <td>
+                <a href="{% url 'aplicar_negativo' archivo.id %}" class="btn btn-primary">Aplicar Negativo</a>
+                <a href="{% url 'ver_imagen_negativa' archivo.id %}" class="btn btn-success">Ver Imagen Negativa</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>

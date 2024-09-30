@@ -88,35 +88,20 @@ class ArchivoDicom(models.Model):
             self.imagen_indexada.save('imagen_indexada.jpg', buffer)
 
 
-        def ajustar_contraste(self, factor):
-            ds = pydicom.dcmread(self.archivo.path)
-            if hasattr(ds, 'pixel_array'):
-                img = Image.fromarray(ds.pixel_array)
-                if img.mode != "L":
-                    img = img.convert("L")
-                
-                enhancer = ImageEnhance.Contrast(img)
-                img = enhancer.enhance(factor)  
-
-                
-                buffer = BytesIO()
-                img.save(buffer, format='JPEG')
-                self.imagen_indexada.save(f'imagen_contraste_{factor}.jpg', buffer)
-                self.save()
-
         def aplicar_negativo(self):
             ds = pydicom.dcmread(self.archivo.path)
+            
             if hasattr(ds, 'pixel_array'):
                 img = Image.fromarray(ds.pixel_array)
+                
                 if img.mode != "L":
                     img = img.convert("L")
-
-                
+            
                 img = ImageOps.invert(img)
-
-                # Guardar la imagen ajustada
                 buffer = BytesIO()
                 img.save(buffer, format='JPEG')
-                self.imagen_indexada.save('imagen_negativa.jpg', buffer)
+                buffer.seek(0) 
+                nombre_imagen = f'{self.pk}_imagen_negativa.jpg'
+                self.imagen_indexada.save(nombre_imagen, buffer, save=False)
                 self.save()
-
+       

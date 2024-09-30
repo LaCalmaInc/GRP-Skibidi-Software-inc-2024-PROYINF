@@ -2,13 +2,16 @@
 
 from django.shortcuts import render, redirect,get_object_or_404
 from .models import ArchivoDicom
+from django.conf import settings
 from .forms import ArchivoDicomForm
 from datetime import datetime
 import pydicom
 from django.urls import reverse
 from django.core.paginator import Paginator
 from django.core.serializers import serialize
-from django.http import JsonResponse
+from django.http import JsonResponse,HttpResponse
+import os 
+from .models import ArchivoDicom
 import json
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
@@ -54,8 +57,6 @@ def signout(request):
     logout(request)
     return redirect('home')
 
-def tools(request):
-    return render(request,'tools.html')
 
 def signin(request):
     if request.method == 'GET':
@@ -69,9 +70,20 @@ def signin(request):
         login(request, user)
         return redirect('index')
 
+def aplicar_negativo_view(request, archivo_id):
+    
+    archivo_dicom = get_object_or_404(ArchivoDicom, id=archivo_id)
+    archivo_dicom.aplicar_negativo()
+    return redirect(request,'ver_imagen_negativa', archivo_id=archivo_dicom.id) #cambiar html
+ 
+def ver_imagen_negativa(request, archivo_id):
+    archivo_dicom = get_object_or_404(ArchivoDicom, id=archivo_id)
 
+    ruta_imagen_negativa = os.path.join(settings.MEDIA_ROOT, archivo_dicom.imagen_indexada.name)
 
-
+    with open(ruta_imagen_negativa, 'rb') as imagen:
+        return HttpResponse(imagen.read(), content_type='image/jpeg') #aplicar response en html
+    
 def home(request):
     return render(request, 'home.html')
 
@@ -107,9 +119,7 @@ def buscar_maquinarias(request):
     
      
     archivos_serializados = serialize('json', archivos)
-    archivos_json = json.loads(archivos_serializados)
-    
-    
+    archivos_json = json.loads(archivos_serializados)    
     maquinarias = ArchivoDicom.objects.values_list("nombre_maquinaria", flat=True).distinct()
     estudios = ArchivoDicom.objects.values_list("nombre_estudio", flat=True).distinct()
     protocolos = ArchivoDicom.objects.values_list("protocol_name", flat=True).distinct()
@@ -130,7 +140,36 @@ def buscar_maquinarias(request):
     
     return render(request, 'ver_imagenes_dicom.html', context)
 
-def detalles_maquinarias(request, nombre_paciente, nombre_maquinaria, nombre_estudio, protocol_name):
+
+def tools(request):
+    nombre = request.GET.get('nombre', '')
+    maquinaria = request.GET.get('maquinaria', '')
+
+    archivos = ArchivoDicom.objects.all()
+    archivos_dicom = ArchivoDicom.objects.all()
+    if nombre:
+        archivos = archivos.filter(nombre_paciente__icontains=nombre)
+    if maquinaria:
+        archivos = archivos.filter(nombre_maquinaria__icontains=maquinaria)
+
+
+    
+  
+    maquinarias = ArchivoDicom.objects.values_list("nombre_maquinaria", flat=True).distinct()
+    archivos = archivos.values('nombre_paciente', 'nombre_maquinaria','nombre_estudio','protocol_name').distinct()
+    
+
+    context = {
+        'archivos': archivos,
+        'maquinarias': maquinarias,
+        'nombre': nombre,
+        'maquinaria_id': maquinaria, 
+        'archivos_dicom': archivos_dicom, 
+    }
+    
+    return render(request, 'tools.html', context)
+
+def detalles_maquinarias(request, nombre_paciente, nombre_maquinaria,protocol_name,nombre_estudio):
     archivos = ArchivoDicom.objects.filter(nombre_paciente=nombre_paciente, nombre_maquinaria=nombre_maquinaria, nombre_estudio = nombre_estudio, protocol_name = protocol_name)
     
     context = {
@@ -142,6 +181,8 @@ def detalles_maquinarias(request, nombre_paciente, nombre_maquinaria, nombre_est
     }
     
     return render(request, 'detalles_maquinarias_dicom.html', context)
+
+
 
 def visualizar_fotos_filtradas(request, nombre_paciente, nombre_maquinaria, nombre_estudio, protocol_name):
     archivos = ArchivoDicom.objects.filter(
@@ -161,7 +202,21 @@ def visualizar_fotos_filtradas(request, nombre_paciente, nombre_maquinaria, nomb
     
     return render(request, 'visualizar_fotos_filtradas.html', context)
 
+def visualizar_fotos_filtradas_neg(request, nombre_paciente, nombre_maquinaria):
 
+    archivos = ArchivoDicom.objects.filter(
+            nombre_paciente=nombre_paciente, 
+            nombre_maquinaria=nombre_maquinaria
+            
+    )
+
+    context = {
+
+        'archivos': archivos,
+        'nombre_paciente': nombre_paciente,
+        'nombre_maquinaria': nombre_maquinaria
+        }
+    return render(request,'tools.html',context)
 
 
 def listar_dias(request):
