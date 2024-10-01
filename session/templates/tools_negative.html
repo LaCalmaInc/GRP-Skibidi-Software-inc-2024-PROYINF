@@ -12,7 +12,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            position: relative;
+            position:relative;
             width: 100%;
             max-width: 500px;
             margin-bottom: 20px;
@@ -47,10 +47,44 @@
             height: auto;
             overflow: hidden;
         }
+        .sidebar {
+            margin: 0;
+            padding: 0;
+            width: 100px;
+            background-color: #516af6;
+            position: fixed;
+            height: 100%;
+            overflow: auto;
+        }
+
+        .sidebar a {
+            display: block;
+            color: black;
+            padding: 16px;
+            text-decoration: none;
+        }
+        
+        .sidebar a.active {
+            background-color: #314ff8;
+            color: white;
+        }
+
+        .sidebar a:hover:not(.active) {
+            background-color: #555;
+            color: white;
+        }
+
     </style>
 </head>
 <body>
+    <div class="sidebar">
+        <a class="active" href="#home"><img src="https://img.icons8.com/ios-filled/50/ffffff/medical-heart.png" alt="Icono 1"></a>
+        <a href="#news"><img src=https://iconos8.es/icon/GWefNq9FTx08/medical-scan alt="Icono 2"></a>
+        <a href="#contact"><img src="https://img.icons8.com/ios-filled/50/ffffff/stethoscope.png" alt="Icono 3"></a>
+        <a href="#about">About</a>
+    </div>
 <div class="container">
+    
     <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
         <a href="{% url 'index' %}" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
             <img src="{% static 'images/llama2.gif' %}" height="50" alt="hola">
@@ -141,7 +175,6 @@
                 showImage(currentIndex);
             });
 
-            // Zoom y Pan
             images.forEach(image => {
                 const img = image.querySelector('img');
                 img.addEventListener('mousedown', function (e) {
@@ -167,8 +200,8 @@
                 img.addEventListener('wheel', function (e) {
                     e.preventDefault();
                     let rect = img.getBoundingClientRect();
-                    let offsetX = e.clientX - rect.left; // X position within the image
-                    let offsetY = e.clientY - rect.top;  // Y position within the image
+                    let offsetX = e.clientX - rect.left; 
+                    let offsetY = e.clientY - rect.top;  
                     let xs = (offsetX - pointX) / scale;
                     let ys = (offsetY - pointY) / scale;
                     let delta = (e.wheelDelta ? e.wheelDelta : -e.deltaY);

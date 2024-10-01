@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visualizador de Imágenes DICOM</title>
+    <link rel="stylesheet" type="text/css" href="https://bootswatch.com/5/solar/bootstrap.min.css">
+    <style>
+        /* Estilos del sidebar */
+        .sidebar {
+            height: 100%;
+            width: 60px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: #0d6efd;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 10px;
+            z-index: 1;
+        }
+
+        .sidebar a {
+            text-decoration: none;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            display: block;
+            margin-bottom: 10px;
+            transition: all 0.2s;
+        }
+
+        .sidebar a:hover {
+            background-color: #1d71f2;
+            border-radius: 5px;
+        }
+
+        .sidebar img {
+            width: 30px;
+            height: 30px;
+            margin-bottom: 15px;
+        }
+
+        .container-content {
+            margin-left: 70px; /* Ajuste del margen para que el contenido no quede debajo del sidebar */
+            padding: 20px;
+        }
+
+        .dicom-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            margin-bottom: 20px;
+        }
+
+        .dicom-image {
+            display: none;
+            width: 100%;
+            height: auto;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .dicom-image img {
+            transition: transform 0.2s ease-in-out;
+            width: 100%;
+            height: auto;
+            transform-origin: center center;
+            cursor: grab;
+        }
+
+        .dicom-image.active {
+            display: block;
+        }
+
+        .navigation-buttons {
+            margin-top: 10px;
+        }
+
+        .select-index {
+            margin-bottom: 5px;
+            width: fit-content;
+        }
+
+        .zoom-container {
+            position: relative;
+            width: 100%;
+            height: auto;
+            overflow: hidden;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <a href="#" title="Opción 1">
+            <img src="https://img.icons8.com/ios-filled/50/ffffff/medical-heart.png" alt="Icono 1">
+        </a>
+        <a href="#" title="Opción 2">
+            <img src="/static/images/mriscan.png" alt="Icono 2">
+        </a>
+        <a href="#" title="Opción 3">
+            <img src="https://img.icons8.com/ios-filled/50/ffffff/stethoscope.png" alt="Icono 3">
+        </a>
+        <a href="#" title="Opción 4">
+            <img src="https://img.icons8.com/ios-filled/50/ffffff/pill.png" alt="Icono 4">
+        </a>
+        <a href="#" title="Opción 5">
+            <img src="https://img.icons8.com/ios-filled/50/ffffff/syringe.png" alt="Icono 5">
+        </a>
+    </div>
+
+    <!-- Contenido principal -->
+    <div class="container-content">
+        <center>
+            <h1>Visualizador de Imágenes DICOM</h1>
+            <h2>Paciente: anon100707BXC002_00001</h2>
+        </center>
+
+        <div class="container d-flex justify-content-left">
+            <div class="dicom-container" id="dicom-container-1">
+                <select class="select-index">
+                    <!-- Opciones de imágenes -->
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                </select>
+                <div class="dicom-image zoom-container">
+                    <img src="https://via.placeholder.com/300x500" alt="DICOM 1" style="transform: scale(1);">
+                </div>
+
+                <div class="navigation-buttons d-flex justify-content-center">
+                    <button class="prev-btn btn btn-primary mx-2">Anterior</button>
+                    <button class="next-btn btn btn-success mx-2">Siguiente</button>
+                    <button id="negativo-btn" class="btn btn-warning">Activar Negativo</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
