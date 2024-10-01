@@ -17,6 +17,12 @@
             display: none;
             margin-bottom: 10px;
         }
+        .dicom-image img {
+            transition: transform 0.2s ease-in-out;
+            width: 100%;
+            height: auto;
+            transform-origin: center center;
+        }
         .dicom-image.active {
             display: block;
         }
@@ -37,13 +43,42 @@
             align-items: center;
         }
         .zoom-image {
-            transition: transform 0.2s ease;
-            max-width: 100%;
-            height: auto;
+            width: 100%;
+            height: 100%;
+            transform-origin: 0px 0px;
+            transform: scale(1) translate(0px, 0px);
+            cursor: grab;
         }
         .zoom-container.zoomed .zoom-image {
             transform: scale(2);
             transform-origin: center;
+        }
+        .dicom-container {
+        position: relative;
+        width: 100%;
+        max-width: 500px; 
+        height: auto;
+        overflow: hidden;
+        margin-bottom: 20px;
+        }
+
+        
+
+        .navigation-buttons {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10; 
+        }
+
+        .negative-toggle {
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        .zoom-slider {
+            margin-top: 10px;
         }
     </style>
 </head>
@@ -78,7 +113,7 @@
         {% for archivo in archivos %}
             <div class="dicom-image">
                 <img id="dicomImage{{ forloop.counter }}" src="{{ archivo.imagen_indexada.url }}" 
-                     alt="Imagen de {{ nombre_paciente }}" style="transform: scale(1); transition: transform 0.2s ease-in-out;">
+                    alt="zoom" style="transform: scale(1); transition: transform 0.2s ease-in-out;">
             </div>
         {% endfor %}
         <br><br><br>
@@ -114,9 +149,7 @@
                     img.classList.remove('active');
                     if (i === index) {
                         img.classList.add('active');
-                        // Actualizar el onclick del botón de negativo con el ID correcto
                         negativoBtn.setAttribute('onclick', `toggleNegativo('dicomImage${index + 1}', this)`);
-                        // Comprobar si la imagen ya tiene el filtro aplicado y ajustar el texto del botón
                         const currentImage = document.getElementById(`dicomImage${index + 1}`);
                         if (currentImage.style.filter === "invert(100%)") {
                             negativoBtn.textContent = "Deshabilitar Negativo";
@@ -184,40 +217,7 @@
     });
 </script>
 
-<style>
-    .dicom-container {
-        position: relative;
-        width: 100%;
-        max-width: 500px; 
-        height: auto;
-        overflow: hidden;
-        margin-bottom: 20px;
-    }
 
-    .dicom-image img {
-        transition: transform 0.2s ease-in-out;
-        width: 100%;
-        height: auto;
-        transform-origin: center center;
-    }
-
-    .navigation-buttons {
-        position: absolute;
-        bottom: 10px;
-        left: 50%;
-        transform: translateX(-50%);
-        z-index: 10; 
-    }
-
-    .negative-toggle {
-        margin-top: 10px;
-        text-align: center;
-    }
-
-    .zoom-slider {
-        margin-top: 10px;
-    }
-</style>
 
 </body>
 </html>
