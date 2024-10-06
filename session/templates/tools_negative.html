@@ -121,7 +121,13 @@
             <button class="prev-btn btn btn-primary mx-2">Anterior</button>
             <button class="next-btn btn btn-success mx-2">Siguiente</button>
             <button id="negativo-btn" class="btn btn-warning">Activar Negativo</button>
+            <div class="contrast-slider zoom-slider">
+                <label for="contrast-range">Contraste:</label>
+                <input type="range" id="contrast-range" min="50" max="200" value="100" step="10">
+            </div>
         </div>
+
+        
     </div>
 </div>
 
@@ -136,48 +142,59 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const imageContainers = document.querySelectorAll('.dicom-container');
+    const imageContainers = document.querySelectorAll('.dicom-container');
 
-        imageContainers.forEach((container, containerIndex) => {
-            let currentIndex = 0;
-            const images = container.querySelectorAll('.dicom-image');
-            const totalImages = images.length;
-            const negativoBtn = document.getElementById('negativo-btn');
+    imageContainers.forEach((container, containerIndex) => {
+        let currentIndex = 0;
+        const images = container.querySelectorAll('.dicom-image');
+        const totalImages = images.length;
+        const negativoBtn = document.getElementById('negativo-btn');
+        const contrastRange = container.querySelector('#contrast-range');
 
-            function showImage(index) {
-                images.forEach((img, i) => {
-                    img.classList.remove('active');
-                    if (i === index) {
-                        img.classList.add('active');
-                        negativoBtn.setAttribute('onclick', `toggleNegativo('dicomImage${index + 1}', this)`);
-                        const currentImage = document.getElementById(`dicomImage${index + 1}`);
-                        if (currentImage.style.filter === "invert(100%)") {
-                            negativoBtn.textContent = "Deshabilitar Negativo";
-                        } else {
-                            negativoBtn.textContent = "Activar Negativo";
-                        }
+        function showImage(index) {
+            images.forEach((img, i) => {
+                img.classList.remove('active');
+                if (i === index) {
+                    img.classList.add('active');
+                    negativoBtn.setAttribute('onclick', `toggleNegativo('dicomImage${index + 1}', this)`);
+                    contrastRange.setAttribute('oninput', `adjustContrast('dicomImage${index + 1}', this.value)`);
+
+                    const currentImage = document.getElementById(`dicomImage${index + 1}`);
+                    if (currentImage.style.filter.includes("invert(100%)")) {
+                        negativoBtn.textContent = "Deshabilitar Negativo";
+                    } else {
+                        negativoBtn.textContent = "Activar Negativo";
                     }
-                });
-            }
-
-            container.querySelector('.next-btn').addEventListener('click', function() {
-                currentIndex = (currentIndex + 1) % totalImages;
-                showImage(currentIndex);
+                }
             });
+        }
 
-            container.querySelector('.prev-btn').addEventListener('click', function() {
-                currentIndex = (currentIndex - 1 + totalImages) % totalImages;
-                showImage(currentIndex);
-            });
-
-            container.querySelector('.select-index').addEventListener('change', function(event) {
-                currentIndex = parseInt(event.target.value, 10);
-                showImage(currentIndex);
-            });
-
+        container.querySelector('.next-btn').addEventListener('click', function() {
+            currentIndex = (currentIndex + 1) % totalImages;
             showImage(currentIndex);
         });
+
+        container.querySelector('.prev-btn').addEventListener('click', function() {
+            currentIndex = (currentIndex - 1 + totalImages) % totalImages;
+            showImage(currentIndex);
+        });
+
+        container.querySelector('.select-index').addEventListener('change', function(event) {
+            currentIndex = parseInt(event.target.value, 10);
+            showImage(currentIndex);
+        });
+
+        showImage(currentIndex);
     });
+});
+
+// Función para ajustar el contraste
+function adjustContrast(id, value) {
+    const img = document.getElementById(id);
+    const contrastValue = `contrast(${value}%)`;
+    img.style.filter = `${img.style.filter.replace(/contrast\(\d+%\)/, '')} ${contrastValue}`;
+}
+
 
     function toggleNegativo(id, button) {
         const img = document.getElementById(id);
