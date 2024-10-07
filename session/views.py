@@ -19,6 +19,7 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.db import IntegrityError
 from django.contrib.auth.models import User
 from .models import Image
+from django.core.exceptions import ValidationError
 
 @login_required
 def cargar_archivo_dicom(request):
@@ -27,6 +28,9 @@ def cargar_archivo_dicom(request):
         if form.is_valid():
             archivos = request.FILES.getlist('archivos_dicom')
             for archivo in archivos:
+                if not archivo.name.endswith('.dcm'):
+                    form.add_error('archivos_dicom', 'El archivo debe ser en formato DICOM (.dcm).')
+                    return render(request, 'cargar_archivo_dicom.html', {'form': form})
                 archivo_dicom = ArchivoDicom(archivo=archivo)
                 archivo_dicom.guardar_metadata()
             return redirect('cargar_archivo_dicom')  # Redirigir a la misma página después de cargar
