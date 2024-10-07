@@ -42,6 +42,7 @@ class ArchivoDicom(models.Model):
     columns = models.IntegerField(null=True, blank=True)
     bits_allocated = models.IntegerField(null=True, blank=True)
     bits_stored = models.IntegerField(null=True, blank=True)
+    bit_prueba = models.IntegerField(null=True,blank=None)
 
     def __str__(self):
         return self.nombre_paciente
@@ -77,6 +78,7 @@ class ArchivoDicom(models.Model):
         self.nombre_estudio = ds.InstitutionalDepartmentName if hasattr(ds, 'InstitutionalDepartmentName') else None
         self.genero = ds.PatientSex if hasattr(ds, 'PatientSex') else None
         self.nombre_maquinaria = ds.StationName if hasattr(ds, 'StationName') else None
+        self.bit_prueba = 0
         self.save()
 
         if hasattr(ds, 'pixel_array'):
@@ -104,4 +106,4 @@ class ArchivoDicom(models.Model):
                 nombre_imagen = f'{self.pk}_imagen_negativa.jpg'
                 self.imagen_indexada.save(nombre_imagen, buffer, save=False)
                 self.save()
-       
+        
