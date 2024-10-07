@@ -8,4 +8,7 @@ __pycache__/
 # Django
 *.sqlite3
 
+#dicom
+archivos_dicom/
+
 
