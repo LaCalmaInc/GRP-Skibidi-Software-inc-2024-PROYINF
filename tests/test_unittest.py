@@ -5,10 +5,7 @@ import os
 from django.test import Client
 from django.urls import reverse
 from django.conf import settings
-import tempfile
-import shutil
 
-from session.models import ArchivoDicom
 
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'INF236.settings')
@@ -58,20 +55,14 @@ class TestAPIEndpoints(unittest.TestCase):
         with open('IMG-0002-00001.dcm', 'rb') as archivo:
             archivo_dicom = SimpleUploadedFile("archivo.dcm", archivo.read(), content_type="application/dicom")
             response = self.client.post(reverse('cargar_archivo_dicom'), {'archivos_dicom': archivo_dicom})
-
         self.assertEqual(response.status_code, 200)
-        archivo_guardado = ArchivoDicom.objects.last()  
-        archivo_guardado.bit_prueba = 1 
 
     def test_subir_archivo_dicom_incorrecto(self):
         """Prueba para intentar subir un archivo que no es DICOM"""
         archivo_incorrecto = SimpleUploadedFile("archivo.txt", b"cualquier cosa que no sea DICOM", content_type="text/plain")
         response = self.client.post(reverse('cargar_archivo_dicom'), {'archivos_dicom': archivo_incorrecto})
         self.assertEqual(response.status_code, 200)
-
-    def tearDown(self):
-        """Eliminar archivos de prueba después de cada prueba"""
-        ArchivoDicom.objects.filter(bit_prueba=1).delete()
+        
 
   
 if __name__ == '__main__':

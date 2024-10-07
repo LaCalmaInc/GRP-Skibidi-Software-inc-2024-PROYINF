@@ -42,7 +42,6 @@ class ArchivoDicom(models.Model):
     columns = models.IntegerField(null=True, blank=True)
     bits_allocated = models.IntegerField(null=True, blank=True)
     bits_stored = models.IntegerField(null=True, blank=True)
-    bit_prueba = models.IntegerField(null=True,blank=None)
 
     def __str__(self):
         return self.nombre_paciente

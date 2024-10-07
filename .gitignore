@@ -9,6 +9,6 @@ __pycache__/
 *.sqlite3
 
 #dicom
-archivos_dicom/
+media/archivos_dicom/
 
 
