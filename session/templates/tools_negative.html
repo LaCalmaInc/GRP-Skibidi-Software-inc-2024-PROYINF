@@ -91,6 +91,8 @@
         <div class="navigation-buttons d-flex justify-content-center">
             <button class="prev-btn btn btn-primary mx-2">Anterior</button>
             <button class="next-btn btn btn-success mx-2">Siguiente</button>
+            <button id="play-btn" class="btn btn-info mx-2">Play</button>
+            <input id="fps-input" type="number" min="1" max="60" value="2" class="form-control mx-2" style="width: 80px;" title="FPS (cuadros por segundo)">
             <button id="negativo-btn" class="btn btn-warning">Activar Negativo</button>
         </div>
     </div>
@@ -114,6 +116,42 @@
             const totalImages = images.length;
             const negativoBtn = document.getElementById('negativo-btn');
             let scale = 1, panning = false, pointX = 0, pointY = 0, start = { x: 0, y: 0 };
+            const playBtn = document.getElementById('play-btn');
+            const fpsInput = document.getElementById('fps-input');
+            let autoPlayInterval = null;
+            
+            function resetZoomAndPosition(img) {
+            scale = 1;
+            pointX = 0;
+            pointY = 0;
+            img.style.transform = `translate(0px, 0px) scale(1)`;
+        }
+
+
+            playBtn.addEventListener('click', function() {
+            if (autoPlayInterval) {
+                    stopAutoPlay();
+                } else {
+                    startAutoPlay();
+                }
+            });
+
+            function startAutoPlay() {
+                const fps = parseInt(fpsInput.value, 10) || 2;
+                const interval = 1000 / fps; 
+                autoPlayInterval = setInterval(() => {
+                    currentIndex = (currentIndex + 1) % totalImages;
+                    showImage(currentIndex);
+                }, interval);
+                playBtn.textContent = "Stop";
+                }
+
+            function stopAutoPlay() {
+                clearInterval(autoPlayInterval);
+                autoPlayInterval = null;
+                playBtn.textContent = "Play";
+                }
+
 
             function showImage(index) {
                 images.forEach((img, i) => {
@@ -122,6 +160,8 @@
                         img.classList.add('active');
                         negativoBtn.setAttribute('onclick', `toggleNegativo('dicomImage${index + 1}', this)`);
                         const currentImage = document.getElementById(`dicomImage${index + 1}`);
+                        resetZoomAndPosition(currentImage);
+
                         if (currentImage.style.filter === "invert(100%)") {
                             negativoBtn.textContent = "Deshabilitar Negativo";
                         } else {
@@ -132,16 +172,19 @@
             }
 
             container.querySelector('.next-btn').addEventListener('click', function() {
+                stopAutoPlay();
                 currentIndex = (currentIndex + 1) % totalImages;
                 showImage(currentIndex);
             });
 
             container.querySelector('.prev-btn').addEventListener('click', function() {
+                stopAutoPlay();
                 currentIndex = (currentIndex - 1 + totalImages) % totalImages;
                 showImage(currentIndex);
             });
 
             container.querySelector('.select-index').addEventListener('change', function(event) {
+                stopAutoPlay();
                 currentIndex = parseInt(event.target.value, 10);
                 showImage(currentIndex);
             });
@@ -190,6 +233,7 @@
             showImage(currentIndex);
         });
     });
+
 
     function toggleNegativo(id, button) {
         const img = document.getElementById(id);
