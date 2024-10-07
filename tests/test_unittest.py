@@ -1,9 +1,12 @@
 import unittest
+from unittest.mock import MagicMock, patch
 import django
 import os
 from django.test import Client
 from django.urls import reverse
 from django.conf import settings
+import tempfile
+import shutil
 
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'INF236.settings')
@@ -17,10 +20,9 @@ class TestAPIEndpoints(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.client = Client()  
+        cls.client = Client()
         cls.user = User.objects.create_user(username='testuser', password='password123')#caso1
         cls.client.login(username='testuser', password='password123')  # Inicia sesion para probar carga de archivos
-
 
     @classmethod
     def tearDownClass(cls):
@@ -28,6 +30,7 @@ class TestAPIEndpoints(unittest.TestCase):
         cls.user.delete()
         User.objects.filter(username='GENERAL XABIER GOMEZ').delete()
         User.objects.filter(username='gragas').delete()
+
 
     #casos de prueba para login y registro
     def test_login_success(self):
@@ -49,6 +52,7 @@ class TestAPIEndpoints(unittest.TestCase):
 
     def test_subir_archivo_dicom_correcto(self):
         """Prueba para subir un archivo DICOM correcto"""
+        
         with open('IMG-0002-00001.dcm', 'rb') as archivo:
             archivo_dicom = SimpleUploadedFile("archivo.dcm", archivo.read(), content_type="application/dicom")
             response = self.client.post(reverse('cargar_archivo_dicom'), {'archivos_dicom': archivo_dicom})
