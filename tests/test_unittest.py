@@ -55,7 +55,7 @@ class TestAPIEndpoints(unittest.TestCase):
         with open('IMG-0002-00001.dcm', 'rb') as archivo:
             archivo_dicom = SimpleUploadedFile("archivo.dcm", archivo.read(), content_type="application/dicom")
             response = self.client.post(reverse('cargar_archivo_dicom'), {'archivos_dicom': archivo_dicom})
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 302)
 
     def test_subir_archivo_dicom_incorrecto(self):
         """Prueba para intentar subir un archivo que no es DICOM"""
