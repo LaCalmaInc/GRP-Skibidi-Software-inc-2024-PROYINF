@@ -19,3 +19,6 @@ Puede acceder a la Wiki desde el siguiente [enlace](https://github.com/LaCalmaIn
 
 ## Proyecto 2024-2
 Proyecto base de 2024-1 que contemplaba la implementacion de mostrar informacion de la cabecera DICOM e incorporar un buscador. Se seguirá el desarrollo de este proyecto incorporando nuevas funciones en la app.
+
+# Pruebas
+ejecutar comando: python -m unittest tests/test_unittest.py
