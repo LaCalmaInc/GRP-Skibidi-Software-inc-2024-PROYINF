@@ -11,14 +11,12 @@
 <body>
     <div class="container">
             <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
-                <a href="{%url 'index'%}" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
+                
+                <a {% block a %} href="{%url 'index'%}" {% endblock %} class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
                     <img src="{% static 'images\llama2.gif' %}"  height="50" alt="hola">                
                     <span class="fs-4" style="color: aliceblue;">DICOM Manager</span>
                 </a>
                 <ul class="nav nav-pills">
-                    <li class="nav-item">
-                        <a href="/" class="nav-link">Home</a>
-                    </li>
                     {% if user.is_authenticated %}
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'logout' %}">Logout</a>

@@ -87,6 +87,7 @@ def ver_imagen_negativa(request, nombre_paciente):
 def home(request):
     return render(request, 'home.html')
 
+@login_required
 def index(request):
     return render(request, 'index.html')
 

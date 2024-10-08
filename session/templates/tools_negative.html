@@ -7,21 +7,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Visualizador de Imágenes DICOM</title>
     <link rel="stylesheet" type="text/css" href="https://bootswatch.com/5/solar/bootstrap.min.css">
+
     <style>
         .dicom-container {
             display: flex;
             flex-direction: column;
-            align-items: auto;
+            align-items: center;
+            position:relative;
+            width: 100%;
+            max-width: 500px;
+            margin-bottom: 20px;
         }
         .dicom-image {
             display: none;
-            margin-bottom: 10px;
+            width: 100%;
+            height: auto;
+            overflow: hidden;
+            position: relative;
         }
         .dicom-image img {
             transition: transform 0.2s ease-in-out;
             width: 100%;
             height: auto;
             transform-origin: center center;
+            cursor: grab;
         }
         .dicom-image.active {
             display: block;
@@ -34,56 +43,30 @@
             width: fit-content;
         }
         .zoom-container {
-            position: static;
-            overflow: hidden;
-            width: 300px;
-            height: 200px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        .zoom-image {
+            position: relative;
             width: 100%;
-            height: 100%;
-            transform-origin: 0px 0px;
-            transform: scale(1) translate(0px, 0px);
-            cursor: grab;
+            height: auto;
+            overflow: hidden;
         }
-        .zoom-container.zoomed .zoom-image {
-            transform: scale(2);
-            transform-origin: center;
-        }
-        .dicom-container {
-        position: relative;
-        width: 100%;
-        max-width: 500px; 
-        height: auto;
-        overflow: hidden;
-        margin-bottom: 20px;
+        .controls {
+            width: 100%;
+            max-width: 500px;
         }
 
-        
+        #contrast-slider {
+            width: 80%;
+            margin-bottom: 15px;
+        }
 
         .navigation-buttons {
-            position: absolute;
-            bottom: 10px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 10; 
-        }
-
-        .negative-toggle {
-            margin-top: 10px;
-            text-align: center;
-        }
-
-        .zoom-slider {
             margin-top: 10px;
         }
     </style>
 </head>
 <body>
+    
 <div class="container">
+    
     <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
         <a href="{% url 'index' %}" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
             <img src="{% static 'images/llama2.gif' %}" height="50" alt="hola">
@@ -103,33 +86,38 @@
     <h2>Paciente: {{ nombre_paciente }}</h2>
 </center>
 <br><br><br>
-<div class="container d-flex justify-content-left">
+<div class="container d-flex justify-content-center">
     <div class="dicom-container" id="dicom-container-1">
-        <select class="select-index">
-            {% for i in archivos %}
-                <option value="{{ forloop.counter0 }}">{{ forloop.counter }}</option>
+        <div class="zoom-container">
+            <select class="select-index mb-2">
+                {% for i in archivos %}
+                    <option value="{{ forloop.counter0 }}">{{ forloop.counter }}</option>
+                {% endfor %}
+            </select>
+            {% for archivo in archivos %}
+                <div class="dicom-image zoom-container">
+                    <img id="dicomImage{{ forloop.counter }}" src="{{ archivo.imagen_indexada.url }}" 
+                        alt="dicomImage{{ forloop.counter }}" style="transform: scale(1);">
+                </div>
             {% endfor %}
-        </select>
-        {% for archivo in archivos %}
-            <div class="dicom-image">
-                <img id="dicomImage{{ forloop.counter }}" src="{{ archivo.imagen_indexada.url }}" 
-                    alt="zoom" style="transform: scale(1); transition: transform 0.2s ease-in-out;">
+        </div>
+        <div class="controls d-flex flex-column align-items-center mt-3">
+            <img src="{% static 'images\llama2.gif' %}"alt="Icono de Contraste" style="width: 24px; height: 24px; margin-right: 8px;">
+            <input type="range" id="contrast-slider" min="0" max="200" value="100" class="form-range">
+            <div class="navigation-buttons d-flex justify-content-center mt-2">
+                <button class="prev-btn btn btn-warning mx-2">Anterior</button>
+                <button class="next-btn btn btn-success mx-2">Siguiente</button>
+                <button class="play-btn btn btn-primary mx-2">Play</button> 
+                <button id="negativo-btn" class="btn btn-danger mx-2">Activar Negativo</button>
             </div>
-        {% endfor %}
-        <br><br><br>
-        <div class="navigation-buttons d-flex justify-content-center">
-            <button class="prev-btn btn btn-primary mx-2">Anterior</button>
-            <button class="next-btn btn btn-success mx-2">Siguiente</button>
-            <button id="negativo-btn" class="btn btn-warning">Activar Negativo</button>
-            <div class="contrast-slider zoom-slider">
-                <label for="contrast-range">Contraste:</label>
-                <input type="range" id="contrast-range" min="50" max="200" value="100" step="10">
+            <div class="fps-control mt-2"> 
+                <label for="fps-input" class="form-label">FPS:</label>
+                <input id="fps-input" type="number" value="2" min="1" max="60" class="form-control" style="width: 60px; display: inline-block; margin: 0 10px;">
             </div>
         </div>
-
-        
     </div>
 </div>
+
 
 <div class="container">
     <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
@@ -141,15 +129,19 @@
 </div>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+   document.addEventListener('DOMContentLoaded', function () {
     const imageContainers = document.querySelectorAll('.dicom-container');
+    const contrastSlider = document.getElementById('contrast-slider');
+    const fpsInput = document.getElementById('fps-input'); // Input para los FPS
+    let autoPlayInterval;
 
     imageContainers.forEach((container, containerIndex) => {
         let currentIndex = 0;
         const images = container.querySelectorAll('.dicom-image');
         const totalImages = images.length;
         const negativoBtn = document.getElementById('negativo-btn');
-        const contrastRange = container.querySelector('#contrast-range');
+        const playButton = container.querySelector('.play-btn'); // Botón para iniciar la reproducción
+        let scale = 1, panning = false, pointX = 0, pointY = 0, start = { x: 0, y: 0 };
 
         function showImage(index) {
             images.forEach((img, i) => {
@@ -157,10 +149,11 @@
                 if (i === index) {
                     img.classList.add('active');
                     negativoBtn.setAttribute('onclick', `toggleNegativo('dicomImage${index + 1}', this)`);
-                    contrastRange.setAttribute('oninput', `adjustContrast('dicomImage${index + 1}', this.value)`);
-
                     const currentImage = document.getElementById(`dicomImage${index + 1}`);
-                    if (currentImage.style.filter.includes("invert(100%)")) {
+                    resetZoomAndPosition(currentImage); // Restablecer el zoom y la posición al cambiar de imagen
+                    contrastSlider.value = 100; // Restablecer el valor del slider de contraste
+                    updateContrast(currentImage, contrastSlider.value); // Reiniciar el contraste de la imagen
+                    if (currentImage.style.filter === "invert(100%)") {
                         negativoBtn.textContent = "Deshabilitar Negativo";
                     } else {
                         negativoBtn.textContent = "Activar Negativo";
@@ -169,72 +162,124 @@
             });
         }
 
-        container.querySelector('.next-btn').addEventListener('click', function() {
+        function resetZoomAndPosition(img) {
+            scale = 1;
+            pointX = 0;
+            pointY = 0;
+            img.style.transform = `translate(0px, 0px) scale(1)`;
+        }
+
+        function updateContrast(img, value) {
+            img.style.filter = `contrast(${value}%)`;
+        }
+
+        function startAutoPlay() {
+            const fps = parseInt(fpsInput.value, 10) || 2; // Toma el valor de los FPS del input
+            const interval = 1000 / fps; // Calcula el intervalo en milisegundos
+            autoPlayInterval = setInterval(() => {
+                currentIndex = (currentIndex + 1) % totalImages;
+                showImage(currentIndex);
+            }, interval);
+            playButton.textContent = "Stop";
+        }
+
+        function stopAutoPlay() {
+            clearInterval(autoPlayInterval);
+            autoPlayInterval = null;
+            playButton.textContent = "Play";
+        }
+
+        playButton.addEventListener('click', function () {
+            if (autoPlayInterval) {
+                stopAutoPlay();
+            } else {
+                startAutoPlay();
+            }
+        });
+
+        contrastSlider.addEventListener('input', function () {
+            const activeImage = document.querySelector('.dicom-image.active img');
+            if (activeImage) {
+                updateContrast(activeImage, contrastSlider.value);
+            }
+        });
+
+        container.querySelector('.next-btn').addEventListener('click', function () {
+            stopAutoPlay(); // Detener la reproducción si está activa
             currentIndex = (currentIndex + 1) % totalImages;
             showImage(currentIndex);
         });
 
-        container.querySelector('.prev-btn').addEventListener('click', function() {
+        container.querySelector('.prev-btn').addEventListener('click', function () {
+            stopAutoPlay(); // Detener la reproducción si está activa
             currentIndex = (currentIndex - 1 + totalImages) % totalImages;
             showImage(currentIndex);
         });
 
-        container.querySelector('.select-index').addEventListener('change', function(event) {
+        container.querySelector('.select-index').addEventListener('change', function (event) {
+            stopAutoPlay(); // Detener la reproducción si está activa
             currentIndex = parseInt(event.target.value, 10);
             showImage(currentIndex);
+        });
+
+        images.forEach(image => {
+            const img = image.querySelector('img');
+            img.addEventListener('mousedown', function (e) {
+                e.preventDefault();
+                start = { x: e.clientX - pointX, y: e.clientY - pointY };
+                panning = true;
+                img.style.cursor = 'grabbing';
+            });
+
+            img.addEventListener('mouseup', function () {
+                panning = false;
+                img.style.cursor = 'grab';
+            });
+
+            img.addEventListener('mousemove', function (e) {
+                e.preventDefault();
+                if (!panning) return;
+                pointX = (e.clientX - start.x);
+                pointY = (e.clientY - start.y);
+                img.style.transform = `translate(${pointX}px, ${pointY}px) scale(${scale})`;
+            });
+
+            img.addEventListener('wheel', function (e) {
+                e.preventDefault();
+                let rect = img.getBoundingClientRect();
+                let offsetX = e.clientX - rect.left;
+                let offsetY = e.clientY - rect.top;
+                let xs = (offsetX - pointX) / scale;
+                let ys = (offsetY - pointY) / scale;
+                let delta = (e.wheelDelta ? e.wheelDelta : -e.deltaY);
+                if (delta > 0) {
+                    scale *= 1.2;
+                } else {
+                    scale /= 1.2;
+                }
+                pointX = offsetX - xs * scale;
+                pointY = offsetY - ys * scale;
+                img.style.transform = `translate(${pointX}px, ${pointY}px) scale(${scale})`;
+            });
         });
 
         showImage(currentIndex);
     });
 });
 
-// Función para ajustar el contraste
-function adjustContrast(id, value) {
-    const img = document.getElementById(id);
-    const contrastValue = `contrast(${value}%)`;
-    img.style.filter = `${img.style.filter.replace(/contrast\(\d+%\)/, '')} ${contrastValue}`;
-}
-
-
     function toggleNegativo(id, button) {
         const img = document.getElementById(id);
         if (img.style.filter === "invert(100%)") {
-            img.style.filter = "none"; 
+            img.style.filter = "none";
             button.textContent = "Activar Negativo";
         } else {
-            img.style.filter = "invert(100%)"; 
+            img.style.filter = "invert(100%)";
             button.textContent = "Deshabilitar Negativo";
         }
     }
 
-    function applyMouseZoom(containerId, imageId) {
-        const container = document.getElementById(containerId);
-        const img = document.getElementById(imageId);
-        let zoomLevel = 1;
 
-        container.addEventListener('wheel', function(event) {
-            event.preventDefault();
-
-            if (event.deltaY < 0) {
-                zoomLevel += 0.1;
-            } else {
-                zoomLevel -= 0.1; 
-            }
-
-            zoomLevel = Math.min(Math.max(zoomLevel, 1), 3);
-            img.style.transform = `scale(${zoomLevel})`;
-            container.style.overflow = zoomLevel > 1 ? 'auto' : 'hidden';
-        });
-    }
-
-    document.addEventListener('DOMContentLoaded', function() {
-        {% for archivo in archivos %}
-            applyMouseZoom('dicom-container-1', 'dicomImage{{ forloop.counter }}');
-        {% endfor %}
-    });
 </script>
-
-
 
 </body>
 </html>

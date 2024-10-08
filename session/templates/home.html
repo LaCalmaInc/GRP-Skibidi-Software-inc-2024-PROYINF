@@ -3,5 +3,13 @@
 {% block title %}Home{% endblock %}
 
 {% block content %}
-<h1>Home</h1>   
+
+{% block a %}
+   
+{% endblock %}
+<div class="container flex justify-content-between mx-2">
+    <h1><a href="{% url 'signin' %}" class="nav-link">Login</a></h1>
+    <h1><a href="{% url 'signup' %}" class="nav-link">Register</a></h1>
+
+</div>
 {% endblock %}
