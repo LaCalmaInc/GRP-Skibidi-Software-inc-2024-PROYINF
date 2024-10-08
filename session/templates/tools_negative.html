@@ -150,9 +150,9 @@
                     img.classList.add('active');
                     negativoBtn.setAttribute('onclick', `toggleNegativo('dicomImage${index + 1}', this)`);
                     const currentImage = document.getElementById(`dicomImage${index + 1}`);
-                    resetZoomAndPosition(currentImage); // Restablecer el zoom y la posición al cambiar de imagen
-                    contrastSlider.value = 100; // Restablecer el valor del slider de contraste
-                    updateContrast(currentImage, contrastSlider.value); // Reiniciar el contraste de la imagen
+                    resetZoomAndPosition(currentImage); 
+                    contrastSlider.value = 100; 
+                    updateContrast(currentImage, contrastSlider.value); 
                     if (currentImage.style.filter === "invert(100%)") {
                         negativoBtn.textContent = "Deshabilitar Negativo";
                     } else {
@@ -174,8 +174,8 @@
         }
 
         function startAutoPlay() {
-            const fps = parseInt(fpsInput.value, 10) || 2; // Toma el valor de los FPS del input
-            const interval = 1000 / fps; // Calcula el intervalo en milisegundos
+            const fps = parseInt(fpsInput.value, 10) || 2; 
+            const interval = 1000 / fps; 
             autoPlayInterval = setInterval(() => {
                 currentIndex = (currentIndex + 1) % totalImages;
                 showImage(currentIndex);
