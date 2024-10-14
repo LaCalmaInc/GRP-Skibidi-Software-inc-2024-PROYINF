@@ -27,9 +27,8 @@ class TestAPIEndpoints(unittest.TestCase):
     def tearDownClass(cls):
         super().tearDownClass()
         cls.user.delete()
-        User.objects.filter(username='GENERAL XABIER GOMEZ').delete()
-        User.objects.filter(username='gragas').delete()
-
+        User.objects.filter(username='test1').delete()
+        User.objects.filter(username='test2').delete()
 
     #casos de prueba para login y registro
     def test_login_success(self):
@@ -39,16 +38,15 @@ class TestAPIEndpoints(unittest.TestCase):
 
     def test_register_password(self):
         """Prueba de pasword registro con contraseñas distintas"""
-        response = self.client.post(reverse('signup'), {'username': 'GENERAL XABIER GOMEZ', 'password1': 'password13','password2':'password123'})
+        response = self.client.post(reverse('signup'), {'username': 'test1', 'password1': 'password13','password2':'password123'})
         self.assertEqual(response.status_code, 200)
     
     def test_register_passwordOK(self):
         """Prueba de pasword registro todo OK"""
-        response = self.client.post(reverse('signup'), {'username': 'gragas', 'password1': 'password123', 'password2': 'password123'})
+        response = self.client.post(reverse('signup'), {'username': 'test2', 'password1': 'password123', 'password2': 'password123'})
         self.assertEqual(response.status_code, 302)
 
     #casos de prueba para carga de archivos
-
     def test_subir_archivo_dicom_correcto(self):
         """Prueba para subir un archivo DICOM correcto"""
         
