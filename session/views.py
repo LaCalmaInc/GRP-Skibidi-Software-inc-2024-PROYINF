@@ -44,7 +44,7 @@ def signup(request):
         return render(request, 'signup.html', {"form": UserCreationForm})
     else:
 
-        if request.POST["password1"] == request.POST["password2"]:
+        if len(request.POST["password1"])>=8 and request.POST["password1"]== request.POST["password2"]:
             try:
                 user = User.objects.create_user(
                     request.POST["username"], password=request.POST["password1"])
@@ -53,8 +53,9 @@ def signup(request):
                 return redirect('index')
             except IntegrityError:
                 return render(request, 'signup.html', {"form": UserCreationForm, "error": "Username already exists."})
-
-        return render(request, 'signup.html', {"form": UserCreationForm, "error": "Passwords did not match."})
+    
+        else:
+            return render(request, 'signup.html', {"form": UserCreationForm, "error": "Passwords did not match or length isn't enough (8 characters)."})
 
 
 @login_required
