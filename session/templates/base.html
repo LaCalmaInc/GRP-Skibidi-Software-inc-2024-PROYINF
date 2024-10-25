@@ -7,14 +7,17 @@
     <title>{% block title %}Skibidi Softwares Inc{% endblock %}</title>
     <link rel="stylesheet" type="text/css" href="https://bootswatch.com/5/solar/bootstrap.min.css">
     <link rel="icon" href="{% static 'images/League of Legends.svg' %}#katman_1" type="image/x-icon">
+    <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
 </head>
 <body>
     <div class="container">
             <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
                 
                 <a {% block a %} href="{%url 'index'%}" {% endblock %} class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
-                    <img src="{% static 'images\llama2.gif' %}"  height="50" alt="hola">                
-                    <span class="fs-4" style="color: aliceblue;">DICOM Manager</span>
+                    <img src="{% static 'images\llama2.gif' %}"  class="animate__animated animate__backInDown goofy" height="50" alt="hola"  >                
+                    <span class="fs-4 " style="color: aliceblue;">DICOM Manager</span>
                 </a>
                 <ul class="nav nav-pills">
                     {% if user.is_authenticated %}
@@ -43,7 +46,7 @@
       <p class="col-md-4 mb-0 text-body-secondary">© 2024 Analysis Enjoyers, Inc</p>
 
       <a href="#" class="col-md-4 d-flex align-items-center justify-content-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
-          <img src="{% static 'images/llama2.gif' %}" height="50" alt="hola">
+          <img src="{% static 'images/llama2.gif' %}" class="animate__animated animate__backInDown hover:" height="50" alt="hola">
       </a>
     </footer>
 
