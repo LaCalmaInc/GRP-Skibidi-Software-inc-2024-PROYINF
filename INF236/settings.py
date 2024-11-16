@@ -21,7 +21,17 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-edu)b3a%#-$rksa9p_5ktru)iegfce&bh%6&(xt3^c6l(d$&ik'
+def leer_llave(path):
+    try:
+        with open(path, "r") as arch:
+            key = arch.read().strip()
+        return key
+    except FileNotFoundError:
+        raise RuntimeError("El archivo de SECRET_KEY no fue encontrado.")
+    except Exception as e:
+        raise RuntimeError(f"Error al leer la SECRET_KEY: {e}")
+    
+SECRET_KEY = leer_llave(os.path.join(BASE_DIR, "secret_key.txt"))
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
