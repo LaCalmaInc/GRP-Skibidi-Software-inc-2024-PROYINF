@@ -17,7 +17,11 @@ Se estaba cargando la secret key de Django en el repositorios, lo cual podria te
 
 Se utiliza el txt con la secret key y se agrego su ruta al .gitignore para no tener denuevo el mismo problema.
 
-## Segunda inpección (Despues de corregir 2 Quality issues)
+## Segunda inspección (Despues de corregir 2 Quality issues)
+
+Los issues que fueron corregidos, fueron solucionados exitosamente, no reportandoce en la la nueva inspección, disminuyendo los issues totales del software de 37 a 35.
+
+![Grafico]()
  
 
 
