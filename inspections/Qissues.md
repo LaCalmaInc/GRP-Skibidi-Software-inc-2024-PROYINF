@@ -1,4 +1,6 @@
-## Inspección de Código con SonarQube
+# Inspección de Código con SonarQube
+
+## Primera inspección
 
 ### Issue 1
 ![Issue1](https://github.com/LaCalmaInc/GRP-Skibidi-Software-inc-2024-PROYINF/blob/main/inspections/issue1.png)
@@ -14,6 +16,8 @@ Esta observacion de corrigio en el archivo "views.py".
 Se estaba cargando la secret key de Django en el repositorios, lo cual podria tener implicancias de seguridad graves, en caso de que el software entre en funcionamiento, como eludir la autenticación y acceder a datos sensibles de los usuarios. Es por esto que SonarQube recomendo, sacar la secret key del repositorio y usar un gestor para manejar estas, para garantizar la seguridad del código y proteger los futuros datos sensibles, se implemento el uso de la secret key con un archivo.txt, el cual estara guardado de forma local en el dispositivo.
 
 Se utiliza el txt con la secret key y se agrego su ruta al .gitignore para no tener denuevo el mismo problema.
+
+## Segunda inpección (Despues de corregir 2 Quality issues)
  
 
 
