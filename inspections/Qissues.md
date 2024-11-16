@@ -1,5 +1,8 @@
 # Inspección de Código con SonarQube
 
+![WhatsApp Image 2024-11-16 at 2 11 20 PM](https://github.com/user-attachments/assets/9efc7ad5-71bf-4fca-8f15-9b12f6d060f0)
+
+
 ## Primera inspección
 
 ### Issue 1
