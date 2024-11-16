@@ -21,7 +21,7 @@ Se utiliza el txt con la secret key y se agrego su ruta al .gitignore para no te
 
 Los issues que fueron corregidos, fueron solucionados exitosamente, no reportandoce en la la nueva inspección, disminuyendo los issues totales del software de 37 a 35.
 
-![Grafico]()
+![Grafico](https://github.com/LaCalmaInc/GRP-Skibidi-Software-inc-2024-PROYINF/blob/main/inspections/image.webp)
  
 
 
