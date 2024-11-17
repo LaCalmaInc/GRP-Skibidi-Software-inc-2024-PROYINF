@@ -13,8 +13,8 @@ media/archivos_dicom/
 
 media/imagenes_indexadas/
 
-#secretKey
-SECRET_KEY.txt
+#secretKey comentado para esta entrega (hito 5)
+#SECRET_KEY.txt 
 
 
 
